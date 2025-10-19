@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { X, Send, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface Message {
   role: "user" | "bot";
@@ -19,54 +20,105 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "bot",
-      content: "Hello! I'm EduBot, your AI guidance assistant. I can help you understand your assessment results, suggest learning paths, and answer questions about careers and certifications. How can I help you today?"
+      content: "مرحباً! 👋 أنا EduBot، مساعدك الذكي في EduMentor+. يمكنني مساعدتك في فهم نتائج التقييم، اقتراح مسارات تعليمية، والإجابة على أسئلتك حول المهن والشهادات. كيف يمكنني مساعدتك اليوم؟"
     }
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
 
     const userMessage: Message = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
-
-    // Simple response logic
-    setTimeout(() => {
-      const botResponse = generateResponse(input);
-      setMessages((prev) => [...prev, { role: "bot", content: botResponse }]);
-    }, 500);
-
     setInput("");
-  };
+    setIsLoading(true);
 
-  const generateResponse = (query: string): string => {
-    const lowerQuery = query.toLowerCase();
+    try {
+      const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/edubot-chat`;
+      
+      const response = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          messages: [...messages.map(m => ({ role: m.role === "bot" ? "assistant" : "user", content: m.content })), { role: "user", content: userMessage.content }]
+        }),
+      });
 
-    if (lowerQuery.includes("why") || lowerQuery.includes("match")) {
-      return "Your track recommendation is based on your strengths, interests, and career goals. The assessment analyzed your problem-solving approach, creative thinking, and preferred work style to find the best fit. Would you like me to explain any specific aspect of your results?";
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.error || "فشل الاتصال بالذكاء الاصطناعي");
+      }
+
+      if (!response.body) {
+        throw new Error("فشل الاتصال بالذكاء الاصطناعي");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let assistantContent = "";
+
+      // Add empty bot message that will be updated
+      setMessages((prev) => [...prev, { role: "bot", content: "" }]);
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") break;
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content;
+            if (content) {
+              assistantContent += content;
+              // Update the last message
+              setMessages((prev) => {
+                const newMessages = [...prev];
+                newMessages[newMessages.length - 1] = {
+                  role: "bot",
+                  content: assistantContent,
+                };
+                return newMessages;
+              });
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Chat error:", error);
+      const errorMessage = error instanceof Error ? error.message : "حدث خطأ في الاتصال بالذكاء الاصطناعي";
+      toast.error(errorMessage);
+      // Remove the empty bot message if there was an error
+      setMessages((prev) => prev.slice(0, -1));
+    } finally {
+      setIsLoading(false);
     }
-
-    if (lowerQuery.includes("certificate") || lowerQuery.includes("certification")) {
-      return "Certifications are a great way to validate your skills! Based on your track, I recommend starting with industry-recognized certifications. Check your dashboard for personalized certificate suggestions. Would you like specific recommendations?";
-    }
-
-    if (lowerQuery.includes("course") || lowerQuery.includes("learn")) {
-      return "Your learning plan is customized to your track. Start with foundational courses and gradually progress to advanced topics. Each course builds on the previous one. You can track your progress in the Courses section. What topic interests you most?";
-    }
-
-    if (lowerQuery.includes("job") || lowerQuery.includes("career") || lowerQuery.includes("role")) {
-      return "Your assessment results show you're well-suited for several roles in your field. The job market for your track is growing rapidly. I recommend building a portfolio, networking on LinkedIn, and gaining practical experience through projects. Want to know more about a specific role?";
-    }
-
-    if (lowerQuery.includes("next") || lowerQuery.includes("step")) {
-      return "Great question! I recommend: 1) Complete your first course to build momentum, 2) Join online communities in your field, 3) Start a personal project, 4) Explore scholarship opportunities. Check your dashboard's Next Steps section for more resources!";
-    }
-
-    if (lowerQuery.includes("help") || lowerQuery.includes("stuck")) {
-      return "I'm here to help! You can ask me about: 1) Understanding your assessment results, 2) Career paths and roles, 3) Learning resources and courses, 4) Certifications and skills, 5) Next steps in your journey. What would you like to know?";
-    }
-
-    return "That's an interesting question! I can help you with understanding your results, exploring career paths, finding courses, and planning your next steps. Could you tell me more specifically what you'd like to know?";
   };
 
   if (!isOpen) return null;
@@ -96,7 +148,7 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
         </div>
 
         {/* Messages */}
-        <ScrollArea className="flex-1 p-4">
+        <ScrollArea className="flex-1 p-4" ref={scrollRef}>
           <div className="space-y-4">
             {messages.map((message, index) => (
               <div
@@ -126,10 +178,24 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
                       : "bg-gradient-primary text-primary-foreground"
                   )}
                 >
-                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex gap-3 animate-fade-in">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-primary/20">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="rounded-2xl px-4 py-3 bg-muted">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: "0.2s" }} />
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: "0.4s" }} />
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </ScrollArea>
 
@@ -139,14 +205,16 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSend()}
-              placeholder="Ask me anything..."
+              onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend()}
+              placeholder="اسألني أي سؤال..."
               className="flex-1 bg-muted border-border"
+              disabled={isLoading}
             />
             <Button
               onClick={handleSend}
               className="bg-gradient-primary shadow-glow"
               size="icon"
+              disabled={isLoading}
             >
               <Send className="w-4 h-4" />
             </Button>

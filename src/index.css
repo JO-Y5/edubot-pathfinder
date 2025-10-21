@@ -8,6 +8,58 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
+    /* EduMentor+ Light Theme */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Electric Blue Primary */
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+    --primary-glow: 217 91% 70%;
+
+    /* Purple Secondary */
+    --secondary: 270 70% 60%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    /* Light Muted Tones */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* Cyan Accent */
+    --accent: 180 80% 55%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+
+    /* Custom Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(270 70% 60%));
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(210 40% 98%));
+    --gradient-hero: linear-gradient(180deg, hsl(0 0% 100%), hsl(210 40% 98%));
+
+    /* Shadows with Glow */
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.2);
+    --shadow-card: 0 10px 30px hsl(0 0% 0% / 0.1);
+
+    /* Success/Warning/Info */
+    --success: 142 76% 45%;
+    --warning: 38 92% 50%;
+    --info: 199 89% 48%;
+  }
+
+  .dark {
     /* EduMentor+ Dark Theme - Space & Innovation Inspired */
     --background: 240 17% 6%;
     --foreground: 220 15% 95%;
@@ -42,8 +94,6 @@ All colors MUST be HSL.
     --input: 240 10% 18%;
     --ring: 217 91% 60%;
 
-    --radius: 0.75rem;
-
     /* Custom Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(270 70% 60%));
     --gradient-card: linear-gradient(135deg, hsl(240 15% 12%), hsl(240 10% 16%));
@@ -72,6 +122,10 @@ All colors MUST be HSL.
 
   /* Glass morphism effect */
   .glass {
+    @apply bg-card/50 backdrop-blur-md border border-border/50;
+  }
+
+  .dark .glass {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);

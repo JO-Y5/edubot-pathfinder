@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot } from "lucide-react";
+import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot, Moon, Sun, Languages } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NavigationProps {
   onOpenBot?: () => void;
@@ -9,14 +11,16 @@ interface NavigationProps {
 
 export const Navigation = ({ onOpenBot }: NavigationProps) => {
   const location = useLocation();
+  const { theme, toggleTheme } = useTheme();
+  const { t, toggleLanguage, language } = useLanguage();
 
   const navItems = [
-    { path: "/", icon: Home, label: "Home" },
-    { path: "/assessment", icon: ClipboardList, label: "Assessment" },
-    { path: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { path: "/courses", icon: BookOpen, label: "Courses" },
-    { path: "/achievements", icon: Award, label: "Achievements" },
-    { path: "/settings", icon: Settings, label: "Settings" },
+    { path: "/", icon: Home, label: t("nav.home") },
+    { path: "/assessment", icon: ClipboardList, label: t("nav.assessment") },
+    { path: "/dashboard", icon: LayoutDashboard, label: t("nav.dashboard") },
+    { path: "/courses", icon: BookOpen, label: t("nav.courses") },
+    { path: "/achievements", icon: Award, label: t("nav.achievements") },
+    { path: "/settings", icon: Settings, label: t("nav.settings") },
   ];
 
   return (
@@ -51,13 +55,30 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
                 </Link>
               );
             })}
+            
+            <Button
+              onClick={toggleTheme}
+              variant="ghost"
+              size="sm"
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+
+            <Button
+              onClick={toggleLanguage}
+              variant="ghost"
+              size="sm"
+            >
+              <Languages className="w-4 h-4" />
+            </Button>
+
             <Button
               size="sm"
               className="bg-gradient-primary shadow-glow"
               onClick={onOpenBot}
             >
               <Bot className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">EduBot</span>
+              <span className="hidden sm:inline">{t("nav.askBot")}</span>
             </Button>
           </div>
         </div>

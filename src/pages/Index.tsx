@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Brain, TrendingUp, Award, Globe, Sparkles, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
+  const { t } = useLanguage();
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -10,46 +15,57 @@ const Index = () => {
         <div className="text-center max-w-4xl mx-auto animate-fade-in">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-sm text-primary font-medium">AI-Powered Career Guidance</span>
+            <span className="text-sm text-primary font-medium">{t("home.badge")}</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Discover Your Perfect
+            {t("home.title")}
             <br />
-            <span className="gradient-text">Academic Path</span>
+            <span className="gradient-text">{t("home.titleHighlight")}</span>
           </h1>
           
           <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-            Take a smart assessment, get AI-driven recommendations, and build a personalized learning roadmap that matches your strengths and goals.
+            {t("home.description")}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link to="/assessment">
-              <Button size="lg" className="bg-gradient-primary shadow-glow text-lg px-8 group">
-                Start Assessment
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-            <Link to="/dashboard">
-              <Button size="lg" variant="outline" className="text-lg px-8 border-primary/30 hover:bg-primary/10">
-                View Dashboard
-              </Button>
-            </Link>
+            {user ? (
+              <Link to="/dashboard">
+                <Button size="lg" className="bg-gradient-primary shadow-glow text-lg px-8 group">
+                  {t("home.viewDashboard")}
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button size="lg" className="bg-gradient-primary shadow-glow text-lg px-8 group">
+                    {t("home.startAssessment")}
+                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <Link to="/assessment">
+                  <Button size="lg" variant="outline" className="text-lg px-8 border-primary/30 hover:bg-primary/10">
+                    {t("home.viewDashboard")}
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
               <div className="text-3xl font-bold text-primary mb-1">5</div>
-              <div className="text-sm text-muted-foreground">Career Tracks</div>
+              <div className="text-sm text-muted-foreground">{t("home.tracks")}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-secondary mb-1">100+</div>
-              <div className="text-sm text-muted-foreground">Learning Paths</div>
+              <div className="text-sm text-muted-foreground">{t("home.paths")}</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-accent mb-1">50+</div>
-              <div className="text-sm text-muted-foreground">Certificates</div>
+              <div className="text-sm text-muted-foreground">{t("home.certificates")}</div>
             </div>
           </div>
         </div>
@@ -62,9 +78,9 @@ const Index = () => {
             <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center mb-4">
               <Brain className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">AI Matching</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("home.aiMatching")}</h3>
             <p className="text-muted-foreground">
-              Advanced AI analyzes your skills, interests, and goals to find your perfect career match.
+              {t("home.aiMatchingDesc")}
             </p>
           </div>
 
@@ -72,9 +88,9 @@ const Index = () => {
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-primary flex items-center justify-center mb-4">
               <TrendingUp className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Learning Plan</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("home.learningPlan")}</h3>
             <p className="text-muted-foreground">
-              Get a personalized roadmap with courses, certifications, and milestones tailored to you.
+              {t("home.learningPlanDesc")}
             </p>
           </div>
 
@@ -82,9 +98,9 @@ const Index = () => {
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent to-primary flex items-center justify-center mb-4">
               <Award className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Achievements</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("home.achievements")}</h3>
             <p className="text-muted-foreground">
-              Unlock badges and track progress as you complete courses and reach your goals.
+              {t("home.achievementsDesc")}
             </p>
           </div>
 
@@ -92,9 +108,9 @@ const Index = () => {
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mb-4">
               <Globe className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">Bilingual Support</h3>
+            <h3 className="text-xl font-semibold mb-2">{t("home.bilingualSupport")}</h3>
             <p className="text-muted-foreground">
-              Full support for English and Arabic with seamless language switching.
+              {t("home.bilingualSupportDesc")}
             </p>
           </div>
         </div>
@@ -105,13 +121,13 @@ const Index = () => {
         <div className="glass rounded-3xl p-12 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-primary opacity-10"></div>
           <div className="relative z-10">
-            <h2 className="text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
+            <h2 className="text-4xl font-bold mb-4">{t("home.ctaTitle")}</h2>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Join thousands of students who have discovered their ideal career path with EduMentor+
+              {t("home.ctaDescription")}
             </p>
-            <Link to="/assessment">
+            <Link to={user ? "/dashboard" : "/auth"}>
               <Button size="lg" className="bg-gradient-primary shadow-glow text-lg px-8">
-                Take the Assessment Now
+                {t("home.ctaButton")}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>

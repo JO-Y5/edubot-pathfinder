@@ -2,3 +2,6 @@ project_id = "wggndinfwtpkcsthhyqz"
 
 [functions.edubot-chat]
 verify_jwt = false
+
+[functions.assessment-score]
+verify_jwt = true

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { FeedbackDialog } from "./FeedbackDialog";
 
 interface NavigationProps {
   onOpenBot?: () => void;
@@ -13,6 +15,7 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
   const { t, toggleLanguage, language } = useLanguage();
+  const { user } = useAuth();
 
   const navItems = [
     { path: "/", icon: Home, label: t("nav.home") },
@@ -71,6 +74,8 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
             >
               <Languages className="w-4 h-4" />
             </Button>
+
+            {user && <FeedbackDialog />}
 
             <Button
               size="sm"

@@ -5,6 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { ExternalLink, Award, BookOpen, TrendingUp } from "lucide-react";
 import { TRACKS } from "@/data/tracks";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { ProgressCard } from "@/components/ProgressCard";
 
 interface Results {
   primaryTrack: string;

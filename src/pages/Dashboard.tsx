@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { ProgressCard } from "@/components/ProgressCard";
+import { updatePageSEO, pageSEO } from "@/utils/seo";
 
 interface Results {
   primaryTrack: string;
@@ -22,6 +23,7 @@ const Dashboard = () => {
   const [results, setResults] = useState<Results | null>(null);
 
   useEffect(() => {
+    updatePageSEO(pageSEO.dashboard);
     const saved = localStorage.getItem("eduMentorResults");
     if (saved) {
       setResults(JSON.parse(saved));

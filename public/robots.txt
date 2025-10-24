@@ -12,3 +12,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /auth
+Disallow: /settings
+Disallow: /admin
+Disallow: /dashboard
+
+Sitemap: https://yourapp.com/sitemap.xml

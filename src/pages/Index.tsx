@@ -1,12 +1,18 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Brain, TrendingUp, Award, Globe, Sparkles, ArrowRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { updatePageSEO, pageSEO } from "@/utils/seo";
 
 const Index = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+
+  useEffect(() => {
+    updatePageSEO(pageSEO.home);
+  }, []);
 
   return (
     <div className="min-h-screen">

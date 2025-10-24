@@ -5,3 +5,9 @@ verify_jwt = false
 
 [functions.assessment-score]
 verify_jwt = true
+
+[functions.recs-hybrid]
+verify_jwt = true
+
+[functions.assessment-cat]
+verify_jwt = true

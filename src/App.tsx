@@ -20,6 +20,8 @@ import Auth from "./pages/Auth";
 import Coach from "./pages/Coach";
 import Billing from "./pages/Billing";
 import AdminConsole from "./pages/AdminConsole";
+import AdminAdvanced from "./pages/AdminAdvanced";
+import Invoices from "./pages/Invoices";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -50,6 +52,8 @@ const App = () => {
                   <Route path="/coach" element={<Coach />} />
                   <Route path="/billing" element={<Billing />} />
                   <Route path="/admin" element={<AdminConsole />} />
+                  <Route path="/admin/advanced" element={<AdminAdvanced />} />
+                  <Route path="/invoices" element={<Invoices />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

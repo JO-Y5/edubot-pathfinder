@@ -9,6 +9,7 @@ import { EduBot } from "@/components/EduBot";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { OrgProvider } from "@/contexts/OrgContext";
 import Index from "./pages/Index";
 import Assessment from "./pages/NewAssessment";
 import Dashboard from "./pages/Dashboard";
@@ -17,6 +18,8 @@ import Achievements from "./pages/Achievements";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import Coach from "./pages/Coach";
+import Billing from "./pages/Billing";
+import AdminConsole from "./pages/AdminConsole";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,7 +33,8 @@ const App = () => {
         <LanguageProvider>
           <BrowserRouter>
             <AuthProvider>
-              <TooltipProvider>
+              <OrgProvider>
+                <TooltipProvider>
                 <Toaster />
                 <Sonner />
                 <Navigation onOpenBot={() => setIsBotOpen(true)} />
@@ -44,11 +48,14 @@ const App = () => {
                   <Route path="/achievements" element={<Achievements />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/coach" element={<Coach />} />
+                  <Route path="/billing" element={<Billing />} />
+                  <Route path="/admin" element={<AdminConsole />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </TooltipProvider>
-            </AuthProvider>
+            </OrgProvider>
+          </AuthProvider>
           </BrowserRouter>
         </LanguageProvider>
       </ThemeProvider>

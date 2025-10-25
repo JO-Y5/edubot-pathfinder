@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot, Moon, Sun, Languages } from "lucide-react";
+import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot, Moon, Sun, Languages, CreditCard, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -23,6 +23,8 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
     { path: "/dashboard", icon: LayoutDashboard, label: t("nav.dashboard") },
     { path: "/courses", icon: BookOpen, label: t("nav.courses") },
     { path: "/achievements", icon: Award, label: t("nav.achievements") },
+    { path: "/billing", icon: CreditCard, label: "Billing" },
+    { path: "/admin", icon: Shield, label: "Admin" },
     { path: "/settings", icon: Settings, label: t("nav.settings") },
   ];
 

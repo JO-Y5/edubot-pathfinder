@@ -27,6 +27,8 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
     { path: "/admin", icon: Shield, label: "Admin" },
     { path: "/admin/advanced", icon: BarChart2, label: "Advanced" },
     { path: "/invoices", icon: FileText, label: "Invoices" },
+    { path: "/analytics", icon: BarChart2, label: "Analytics" },
+    { path: "/ab-testing", icon: Settings, label: "A/B Tests" },
     { path: "/settings", icon: Settings, label: t("nav.settings") },
   ];
 

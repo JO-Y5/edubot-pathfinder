@@ -136,6 +136,42 @@ export type Database = {
           },
         ]
       }
+      achievements: {
+        Row: {
+          category: string | null
+          code: string
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          name: string
+          points: number
+          requirements: Json | null
+        }
+        Insert: {
+          category?: string | null
+          code: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          points?: number
+          requirements?: Json | null
+        }
+        Update: {
+          category?: string | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          points?: number
+          requirements?: Json | null
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           created_at: string
@@ -245,6 +281,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      certificates: {
+        Row: {
+          certificate_number: string
+          course_id: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          issued_at: string
+          metadata: Json | null
+          pdf_url: string | null
+          user_id: string
+        }
+        Insert: {
+          certificate_number: string
+          course_id: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          issued_at?: string
+          metadata?: Json | null
+          pdf_url?: string | null
+          user_id: string
+        }
+        Update: {
+          certificate_number?: string
+          course_id?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          issued_at?: string
+          metadata?: Json | null
+          pdf_url?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       class_enrollments: {
         Row: {
@@ -467,6 +539,39 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          link: string | null
+          message: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message: string
+          read?: boolean
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          message?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       org_memberships: {
         Row: {
           created_at: string
@@ -564,6 +669,36 @@ export type Database = {
           },
         ]
       }
+      point_transactions: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          points: number
+          reason: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          points: number
+          reason: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          points?: number
+          reason?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -593,6 +728,86 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      recommendations: {
+        Row: {
+          course_id: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          metadata: Json | null
+          reason: string | null
+          score: number
+          user_id: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          score: number
+          user_id: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metadata?: Json | null
+          reason?: string | null
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          org_id: string | null
+          pdf_url: string | null
+          period_end: string
+          period_start: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          org_id?: string | null
+          pdf_url?: string | null
+          period_end: string
+          period_start: string
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          org_id?: string | null
+          pdf_url?: string | null
+          period_end?: string
+          period_start?: string
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscriptions: {
         Row: {
@@ -646,6 +861,71 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_points: {
+        Row: {
+          created_at: string
+          experience: number
+          id: string
+          last_activity_date: string | null
+          level: number
+          streak_days: number
+          total_points: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          experience?: number
+          id?: string
+          last_activity_date?: string | null
+          level?: number
+          streak_days?: number
+          total_points?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          experience?: number
+          id?: string
+          last_activity_date?: string | null
+          level?: number
+          streak_days?: number
+          total_points?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_profiles: {
         Row: {

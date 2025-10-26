@@ -24,6 +24,9 @@ import AdminAdvanced from "./pages/AdminAdvanced";
 import Invoices from "./pages/Invoices";
 import Analytics from "./pages/Analytics";
 import ABTesting from "./pages/ABTesting";
+import Leaderboard from "./pages/Leaderboard";
+import Certificates from "./pages/Certificates";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -58,6 +61,9 @@ const App = () => {
                   <Route path="/invoices" element={<Invoices />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/ab-testing" element={<ABTesting />} />
+                  <Route path="/leaderboard" element={<Leaderboard />} />
+                  <Route path="/certificates" element={<Certificates />} />
+                  <Route path="/reports" element={<Reports />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.usage-report]
 verify_jwt = true
+
+[functions.generate-certificate]
+verify_jwt = true

@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot, Moon, Sun, Languages, CreditCard, Shield, BarChart2, FileText } from "lucide-react";
+import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot, Moon, Sun, Languages, CreditCard, Shield, BarChart2, FileText, Trophy } from "lucide-react";
+import { NotificationBell } from './NotificationBell';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -82,6 +83,7 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
             </Button>
 
             {user && <FeedbackDialog />}
+            {user && <NotificationBell />}
 
             <Button
               size="sm"

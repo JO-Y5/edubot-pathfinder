@@ -42,30 +42,30 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
 
   const settingsItems = [
     { path: "/settings", icon: Settings, label: t("nav_settings"), show: true },
-    { path: "/billing", icon: CreditCard, label: "Billing", show: !!user },
+    { path: "/billing", icon: CreditCard, label: t("sidebar.billing"), show: !!user },
     { path: "/pricing", icon: CreditCard, label: t("nav_pricing"), show: true },
   ];
 
   const adminItems = [
-    { path: "/admin", icon: Shield, label: "Admin", show: !!user },
-    { path: "/admin/advanced", icon: BarChart2, label: "Advanced", show: !!user },
-    { path: "/analytics", icon: BarChart2, label: "Analytics", show: !!user },
-    { path: "/ab-testing", icon: FlaskConical, label: "A/B Tests", show: !!user },
-    { path: "/invoices", icon: FileText, label: "Invoices", show: !!user },
+    { path: "/admin", icon: Shield, label: t("sidebar.admin"), show: !!user },
+    { path: "/admin/advanced", icon: BarChart2, label: t("sidebar.advanced"), show: !!user },
+    { path: "/analytics", icon: BarChart2, label: t("sidebar.analytics"), show: !!user },
+    { path: "/ab-testing", icon: FlaskConical, label: t("sidebar.abTests"), show: !!user },
+    { path: "/invoices", icon: FileText, label: t("sidebar.invoices"), show: !!user },
   ];
 
   const supportItems = [
     { path: "/help", icon: HelpCircle, label: t("help_center"), show: true },
-    { path: "/faq", icon: HelpCircle, label: "FAQ", show: true },
-    { path: "/contact", icon: MessageSquare, label: "Contact", show: true },
+    { path: "/faq", icon: HelpCircle, label: t("sidebar.faq"), show: true },
+    { path: "/contact", icon: MessageSquare, label: t("sidebar.contact"), show: true },
   ];
 
   const otherItems = [
-    { path: "/leaderboard", icon: Trophy, label: "Leaderboard", show: true },
-    { path: "/certificates", icon: FileText, label: "Certificates", show: true },
-    { path: "/providers", icon: Package, label: "Providers", show: !!user },
-    { path: "/reviews", icon: MessageSquare, label: "Reviews", show: true },
-    { path: "/coach", icon: Users, label: "Coach", show: !!user },
+    { path: "/leaderboard", icon: Trophy, label: t("sidebar.leaderboard"), show: true },
+    { path: "/certificates", icon: FileText, label: t("sidebar.certificates"), show: true },
+    { path: "/providers", icon: Package, label: t("sidebar.providers"), show: !!user },
+    { path: "/reviews", icon: MessageSquare, label: t("sidebar.reviews"), show: true },
+    { path: "/coach", icon: Users, label: t("sidebar.coach"), show: !!user },
   ];
 
   const legalItems = [
@@ -114,7 +114,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
       <SidebarContent>
         {/* Main Navigation */}
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Navigation"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{!collapsed && t("sidebar.navigation")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {renderMenuItems(mainItems)}
@@ -124,7 +124,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
 
         {/* Settings */}
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Settings"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{!collapsed && t("sidebar.settings")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {renderMenuItems(settingsItems)}
@@ -135,7 +135,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
         {/* Admin - only if user exists */}
         {user && (
           <SidebarGroup>
-            <SidebarGroupLabel>{!collapsed && "Admin"}</SidebarGroupLabel>
+            <SidebarGroupLabel>{!collapsed && t("sidebar.admin")}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {renderMenuItems(adminItems)}
@@ -146,7 +146,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
 
         {/* Support */}
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Support"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{!collapsed && t("sidebar.support")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {renderMenuItems(supportItems)}
@@ -156,7 +156,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
 
         {/* Other */}
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Other"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{!collapsed && t("sidebar.other")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {renderMenuItems(otherItems)}
@@ -166,7 +166,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
 
         {/* Legal */}
         <SidebarGroup>
-          <SidebarGroupLabel>{!collapsed && "Legal"}</SidebarGroupLabel>
+          <SidebarGroupLabel>{!collapsed && t("sidebar.legal")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {renderMenuItems(legalItems)}

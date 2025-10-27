@@ -89,5 +89,25 @@
     "language": "Language",
     "theme": "Theme",
     "notifications": "Notifications"
+  },
+  "sidebar": {
+    "navigation": "Navigation",
+    "settings": "Settings",
+    "admin": "Admin",
+    "support": "Support",
+    "other": "Other",
+    "legal": "Legal",
+    "billing": "Billing",
+    "advanced": "Advanced",
+    "analytics": "Analytics",
+    "abTests": "A/B Tests",
+    "invoices": "Invoices",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "leaderboard": "Leaderboard",
+    "certificates": "Certificates",
+    "providers": "Providers",
+    "reviews": "Reviews",
+    "coach": "Coach"
   }
 }

@@ -89,5 +89,25 @@
     "language": "اللغة",
     "theme": "المظهر",
     "notifications": "الإشعارات"
+  },
+  "sidebar": {
+    "navigation": "التنقل",
+    "settings": "الإعدادات",
+    "admin": "الإدارة",
+    "support": "الدعم",
+    "other": "أخرى",
+    "legal": "قانوني",
+    "billing": "الفواتير",
+    "advanced": "متقدم",
+    "analytics": "التحليلات",
+    "abTests": "اختبارات A/B",
+    "invoices": "الفواتير",
+    "faq": "الأسئلة الشائعة",
+    "contact": "اتصل بنا",
+    "leaderboard": "لوحة المتصدرين",
+    "certificates": "الشهادات",
+    "providers": "مقدمو الخدمة",
+    "reviews": "التقييمات",
+    "coach": "المدرب"
   }
 }

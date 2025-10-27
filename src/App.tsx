@@ -63,7 +63,7 @@ function AppContent() {
         <div className="flex-1 flex flex-col w-full">
           <Toaster />
           <Sonner />
-          <Navigation />
+          <Navigation onOpenBot={() => setIsBotOpen(true)} />
           <EduBot isOpen={isBotOpen} onClose={() => setIsBotOpen(false)} />
           
           <main className="flex-1 pt-16">

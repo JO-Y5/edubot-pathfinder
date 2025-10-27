@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Home, ClipboardList, Moon, Sun, Languages, Menu } from "lucide-react";
+import { Home, ClipboardList, Moon, Sun, Languages, Menu, Bot, Sparkles } from "lucide-react";
 import { NotificationBell } from './NotificationBell';
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -7,7 +7,11 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
-export const Navigation = () => {
+interface NavigationProps {
+  onOpenBot?: () => void;
+}
+
+export const Navigation = ({ onOpenBot }: NavigationProps) => {
   const { theme, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
@@ -45,6 +49,18 @@ export const Navigation = () => {
                 <span className="hidden sm:inline">{t("nav_assessment")}</span>
               </Button>
             </Link>
+
+            {/* AI Bot Button - Prominent */}
+            <Button
+              onClick={onOpenBot}
+              size="sm"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all"
+            >
+              <Sparkles className="w-4 h-4 sm:mr-2 animate-pulse" />
+              <span className="font-semibold">
+                {i18n.language === 'ar' ? 'مساعد AI' : 'AI Assistant'}
+              </span>
+            </Button>
             
             <div className="flex items-center gap-2 border-l border-border pl-2 ml-2">
               <Button

@@ -7,6 +7,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { FeedbackDialog } from "./FeedbackDialog";
+import { useTranslation } from "react-i18next";
 
 interface NavigationProps {
   onOpenBot?: () => void;
@@ -15,15 +16,16 @@ interface NavigationProps {
 export const Navigation = ({ onOpenBot }: NavigationProps) => {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { t, toggleLanguage, language } = useLanguage();
+  const { t: tCtx } = useLanguage();
+  const { t, i18n } = useTranslation();
   const { user } = useAuth();
 
   const navItems = [
-    { path: "/", icon: Home, label: t("nav.home") },
-    { path: "/assessment", icon: ClipboardList, label: t("nav.assessment") },
-    { path: "/dashboard", icon: LayoutDashboard, label: t("nav.dashboard") },
-    { path: "/courses", icon: BookOpen, label: t("nav.courses") },
-    { path: "/achievements", icon: Award, label: t("nav.achievements") },
+    { path: "/", icon: Home, label: t("nav_home") },
+    { path: "/assessment", icon: ClipboardList, label: t("nav_assessment") },
+    { path: "/dashboard", icon: LayoutDashboard, label: t("nav_dashboard") },
+    { path: "/courses", icon: BookOpen, label: t("nav_courses") },
+    { path: "/achievements", icon: Award, label: t("nav_achievements") },
     { path: "/billing", icon: CreditCard, label: "Billing" },
     { path: "/admin", icon: Shield, label: "Admin" },
     { path: "/admin/advanced", icon: BarChart2, label: "Advanced" },
@@ -32,7 +34,7 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
     { path: "/ab-testing", icon: FlaskConical, label: "A/B Tests" },
     { path: "/providers", icon: Package, label: "Providers" },
     { path: "/reviews", icon: MessageSquare, label: "Reviews" },
-    { path: "/settings", icon: Settings, label: t("nav.settings") },
+    { path: "/settings", icon: Settings, label: t("nav_settings") },
   ];
 
   return (
@@ -77,9 +79,10 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
             </Button>
 
             <Button
-              onClick={toggleLanguage}
+              onClick={() => i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar')}
               variant="ghost"
               size="sm"
+              title={i18n.language === 'ar' ? 'English' : 'عربي'}
             >
               <Languages className="w-4 h-4" />
             </Button>
@@ -93,7 +96,7 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
               onClick={onOpenBot}
             >
               <Bot className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">{t("nav.askBot")}</span>
+              <span className="hidden sm:inline">{t("nav_askBot")}</span>
             </Button>
           </div>
         </div>

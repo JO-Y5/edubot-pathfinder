@@ -41,22 +41,41 @@ const NewAssessment = () => {
   };
 
   const handleNext = () => {
+    // Always check current question first
     if (!answers[question.id]) {
       toast.error(t("assessment.selectError"));
+      return;
+    }
+
+    // Check if all questions up to current are answered
+    const unansweredQuestions = ASSESSMENT_QUESTIONS.slice(0, currentQuestion + 1)
+      .filter(q => !answers[q.id]);
+    
+    if (unansweredQuestions.length > 0) {
+      toast.error(
+        language === 'ar' 
+          ? `يوجد ${unansweredQuestions.length} سؤال لم يتم الإجابة عليه` 
+          : `${unansweredQuestions.length} question(s) not answered`
+      );
       return;
     }
 
     if (currentQuestion < ASSESSMENT_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Check if all questions are answered before submitting
-      const unansweredCount = ASSESSMENT_QUESTIONS.filter(q => !answers[q.id]).length;
-      if (unansweredCount > 0) {
+      // Final check: ALL questions must be answered
+      const allUnanswered = ASSESSMENT_QUESTIONS.filter(q => !answers[q.id]);
+      if (allUnanswered.length > 0) {
         toast.error(
           language === 'ar' 
-            ? `يجب الإجابة على جميع الأسئلة. المتبقي: ${unansweredCount}` 
-            : `Please answer all questions. Remaining: ${unansweredCount}`
+            ? `يجب الإجابة على جميع الأسئلة أولاً. المتبقي: ${allUnanswered.length}` 
+            : `Please answer all ${allUnanswered.length} remaining questions`
         );
+        // Go to first unanswered question
+        const firstUnanswered = ASSESSMENT_QUESTIONS.findIndex(q => !answers[q.id]);
+        if (firstUnanswered >= 0) {
+          setCurrentQuestion(firstUnanswered);
+        }
         return;
       }
       calculateResults();
@@ -83,13 +102,15 @@ const NewAssessment = () => {
       toast.info(t("assessment.calculating"));
 
       // Convert answers to the format expected by the edge function
-      const formattedAnswers = Object.entries(answers).map(([id, value]) => ({
-        id,
-        value: value,
-        category: ASSESSMENT_QUESTIONS.find(q => q.id === id)?.tracks 
-          ? Object.keys(ASSESSMENT_QUESTIONS.find(q => q.id === id)!.tracks)[0] 
-          : 'general'
-      }));
+      const formattedAnswers = Object.entries(answers).map(([id, value]) => {
+        const question = ASSESSMENT_QUESTIONS.find(q => q.id === id);
+        return {
+          id,
+          value: value,
+          category: question?.skills?.[0]?.toLowerCase().replace(/ /g, '_') || 'general',
+          tracks: question?.tracks || {}
+        };
+      });
 
       // Call the assessment-cat edge function for server-side validation
       const { data, error } = await supabase.functions.invoke('assessment-cat', {

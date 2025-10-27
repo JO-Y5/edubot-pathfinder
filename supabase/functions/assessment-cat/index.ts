@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -254,6 +255,48 @@ serve(async (req) => {
       done,
       recommendations
     };
+
+    // Save results to database
+    try {
+      const supabaseClient = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+        {
+          global: {
+            headers: { Authorization: req.headers.get('Authorization')! },
+          },
+        }
+      );
+
+      const primaryTrack = recommendations[0] || 'ai';
+      const topScore = tracks[primaryTrack] || 0;
+      
+      const { error: dbError } = await supabaseClient
+        .from('assessment_results')
+        .insert({
+          user_id: user_id,
+          track_id: primaryTrack,
+          score: topScore,
+          answers: {
+            riasec_scores: riasec,
+            big5_scores: big5,
+            track_scores: tracks,
+            confidence: response.confidence,
+            recommendations: recommendations,
+            raw_answers: answers
+          }
+        });
+
+      if (dbError) {
+        console.error('Error saving assessment results:', dbError);
+        // Don't fail the request, just log the error
+      } else {
+        console.log('Assessment results saved successfully for track:', primaryTrack);
+      }
+    } catch (saveError) {
+      console.error('Error saving to database:', saveError);
+      // Continue with response even if save fails
+    }
 
     return new Response(
       JSON.stringify(response),

@@ -81,7 +81,7 @@ serve(async (req) => {
       
       // Investigative/Research
       'academic_strength': { I: 0.5, R: 0.2, C: 0.3 },
-      'learning_motivation': { I: 0.4, O: 0.3, C: 0.3 },
+      'learning_motivation': { I: 0.7, C: 0.3 },
       
       // Enterprising/Business
       'entrepreneurship': { E: 0.5, I: 0.2, R: 0.3 },

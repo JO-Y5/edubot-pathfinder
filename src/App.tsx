@@ -20,7 +20,7 @@ import Assessment from "./pages/Assessment";
 import AssessmentStart from "./pages/AssessmentStart";
 import AssessmentQuestions from "./pages/AssessmentQuestions";
 import Dashboard from "./pages/Dashboard";
-import Courses from "./pages/NewCourses";
+import Courses from "./pages/Courses";
 import Achievements from "./pages/Achievements";
 import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";

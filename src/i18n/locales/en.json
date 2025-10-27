@@ -8,7 +8,7 @@
   "nav_settings": "Settings",
   "nav_pricing": "Pricing",
   "nav_askBot": "Ask Bot",
-  "home_title": "Discover Your Academic & Career Path Intelligently",
+  "home_title": "Discover Your Academic & Career Path",
   "home_sub": "AI-powered platform to help you choose the right major and plan your professional future",
   "cta_start": "Start Assessment Now",
   "assessment_choose_title": "Choose Your Track",
@@ -31,5 +31,63 @@
   "subscribe_now": "Subscribe Now",
   "help_center": "Help Center",
   "privacy_title": "Privacy Policy",
-  "terms_title": "Terms & Conditions"
+  "terms_title": "Terms & Conditions",
+  "common": {
+    "login": "Login",
+    "logout": "Logout",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "continue": "Continue",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "assessment": {
+    "title": "Skills Assessment",
+    "stepOf": "Question",
+    "from": "of",
+    "previous": "Previous",
+    "next": "Next",
+    "complete": "Complete Assessment",
+    "selectError": "Please select an answer",
+    "calculating": "Calculating your results...",
+    "success": "Assessment completed successfully!",
+    "error": "An error occurred. Please try again.",
+    "section1": "Personality & Interests",
+    "section2": "Skills & Abilities",
+    "section3": "Values & Motivation",
+    "section4": "Career Preferences"
+  },
+  "auth": {
+    "loginRequired": "Please login to continue",
+    "loginTitle": "Welcome Back",
+    "signupTitle": "Create Account"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "myProgress": "My Progress",
+    "recommendations": "Recommendations",
+    "recentCourses": "Recent Courses"
+  },
+  "courses": {
+    "title": "Courses",
+    "allCourses": "All Courses",
+    "myCourses": "My Courses",
+    "startCourse": "Start Course",
+    "continueCourse": "Continue"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "preferences": "Preferences",
+    "language": "Language",
+    "theme": "Theme",
+    "notifications": "Notifications"
+  }
 }

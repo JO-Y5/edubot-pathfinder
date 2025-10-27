@@ -49,6 +49,16 @@ const NewAssessment = () => {
     if (currentQuestion < ASSESSMENT_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      // Check if all questions are answered before submitting
+      const unansweredCount = ASSESSMENT_QUESTIONS.filter(q => !answers[q.id]).length;
+      if (unansweredCount > 0) {
+        toast.error(
+          language === 'ar' 
+            ? `يجب الإجابة على جميع الأسئلة. المتبقي: ${unansweredCount}` 
+            : `Please answer all questions. Remaining: ${unansweredCount}`
+        );
+        return;
+      }
       calculateResults();
     }
   };

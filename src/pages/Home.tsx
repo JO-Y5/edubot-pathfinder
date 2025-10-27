@@ -34,11 +34,7 @@ export default function Home() {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            {t('home_title')}
-            <br />
-            <span className="gradient-text">
-              {i18n.language === 'ar' ? 'بذكاء' : 'Intelligently'}
-            </span>
+            <span className="gradient-text">{t('home_title')}</span>
           </h1>
           
           <p className="text-xl text-muted-foreground mb-8 leading-relaxed">

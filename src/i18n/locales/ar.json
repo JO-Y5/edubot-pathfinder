@@ -8,7 +8,7 @@
   "nav_settings": "الإعدادات",
   "nav_pricing": "الأسعار",
   "nav_askBot": "اسأل المساعد",
-  "home_title": "اكتشف مسارك الأكاديمي والمهني بذكاء",
+  "home_title": "اكتشف مسارك الأكاديمي والمهني",
   "home_sub": "منصة ذكية تساعدك على اختيار التخصص المناسب والتخطيط لمستقبلك المهني باستخدام الذكاء الاصطناعي",
   "cta_start": "ابدأ التقييم الآن",
   "assessment_choose_title": "اختر مسارك",
@@ -31,5 +31,63 @@
   "subscribe_now": "اشترك الآن",
   "help_center": "مركز المساعدة",
   "privacy_title": "سياسة الخصوصية",
-  "terms_title": "الشروط والأحكام"
+  "terms_title": "الشروط والأحكام",
+  "common": {
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "signup": "إنشاء حساب",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "continue": "متابعة",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "back": "رجوع",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح"
+  },
+  "assessment": {
+    "title": "تقييم المهارات",
+    "stepOf": "السؤال",
+    "from": "من",
+    "previous": "السابق",
+    "next": "التالي",
+    "complete": "إنهاء التقييم",
+    "selectError": "الرجاء اختيار إجابة",
+    "calculating": "جاري حساب النتائج...",
+    "success": "تم إكمال التقييم بنجاح!",
+    "error": "حدث خطأ. الرجاء المحاولة مرة أخرى.",
+    "section1": "الشخصية والاهتمامات",
+    "section2": "المهارات والقدرات",
+    "section3": "القيم والحافز",
+    "section4": "التفضيلات المهنية"
+  },
+  "auth": {
+    "loginRequired": "الرجاء تسجيل الدخول للمتابعة",
+    "loginTitle": "مرحباً بعودتك",
+    "signupTitle": "إنشاء حساب جديد"
+  },
+  "dashboard": {
+    "welcome": "مرحباً بعودتك",
+    "myProgress": "تقدمي",
+    "recommendations": "التوصيات",
+    "recentCourses": "الدورات الأخيرة"
+  },
+  "courses": {
+    "title": "الدورات",
+    "allCourses": "جميع الدورات",
+    "myCourses": "دوراتي",
+    "startCourse": "ابدأ الدورة",
+    "continueCourse": "متابعة"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "profile": "الملف الشخصي",
+    "preferences": "التفضيلات",
+    "language": "اللغة",
+    "theme": "المظهر",
+    "notifications": "الإشعارات"
+  }
 }

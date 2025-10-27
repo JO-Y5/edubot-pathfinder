@@ -56,7 +56,7 @@ function AppContent() {
   }, [i18n.language]);
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <div className="flex min-h-screen w-full">
         <AppSidebar onOpenBot={() => setIsBotOpen(true)} />
         

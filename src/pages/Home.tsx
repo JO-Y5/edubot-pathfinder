@@ -18,13 +18,10 @@ export default function Home(){
   }, [i18n.language]);
 
   return (
-    <section className="max-w-6xl mx-auto p-6 pt-24">
-      <h1 className="text-4xl font-extrabold gradient-text">{t('home_title')}</h1>
-      <p className="mt-3 text-muted-foreground text-lg">{t('home_sub')}</p>
-      <Link 
-        to="/assessment/start" 
-        className="mt-6 inline-block bg-gradient-primary text-white px-6 py-3 rounded-xl shadow-glow hover:opacity-90 transition-opacity"
-      >
+    <section className="max-w-6xl mx-auto p-6">
+      <h1 className="text-4xl font-extrabold">{t('home_title')}</h1>
+      <p className="mt-3 text-gray-600">{t('home_sub')}</p>
+      <Link to="/assessment/start" className="mt-6 inline-block bg-black text-white px-6 py-3 rounded-xl">
         {t('cta_start')}
       </Link>
     </section>

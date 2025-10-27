@@ -16,7 +16,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import "@/i18n/config";
 import { useTranslation } from "react-i18next";
 import Home from "./pages/Home";
-import Assessment from "./pages/NewAssessment";
+import Assessment from "./pages/Assessment";
 import AssessmentStart from "./pages/AssessmentStart";
 import AssessmentQuestions from "./pages/AssessmentQuestions";
 import Dashboard from "./pages/Dashboard";

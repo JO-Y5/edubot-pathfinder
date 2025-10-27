@@ -3,208 +3,252 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { ChevronRight, ChevronLeft } from "lucide-react";
-import { TRACKS, SKILL_MAP } from "@/data/tracks";
+import { ASSESSMENT_QUESTIONS } from "@/data/questions";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
-const QUESTIONS = {
-  skills: [
-    { id: "problem-solving", label: "Problem Solving", skill: "Problem Solving" },
-    { id: "analytical", label: "Analytical Thinking", skill: "Analytical Thinking" },
-    { id: "creative", label: "Creative Thinking", skill: "Creative Thinking" },
-    { id: "communication", label: "Communication", skill: "Communication" },
-    { id: "leadership", label: "Leadership", skill: "Leadership" },
-    { id: "mathematics", label: "Mathematics", skill: "Mathematics" },
-  ],
-  interests: [
-    { id: "ai-ml", label: "AI & Machine Learning", tracks: ["ai"] },
-    { id: "web-dev", label: "Web Development", tracks: ["web"] },
-    { id: "security", label: "Cybersecurity", tracks: ["cyber"] },
-    { id: "design", label: "Design & User Experience", tracks: ["design"] },
-    { id: "business", label: "Business & Management", tracks: ["business"] },
-  ],
-  goals: [
-    { id: "research", label: "Research & Innovation", tracks: ["ai", "cyber"] },
-    { id: "build", label: "Build & Create Products", tracks: ["web", "design"] },
-    { id: "protect", label: "Protect & Secure Systems", tracks: ["cyber"] },
-    { id: "design-exp", label: "Design Experiences", tracks: ["design"] },
-    { id: "lead", label: "Lead & Manage Teams", tracks: ["business"] },
-  ]
-};
+const SECTIONS = [
+  { start: 0, end: 10, titleKey: "assessment.section1" },
+  { start: 10, end: 17, titleKey: "assessment.section2" },
+  { start: 17, end: 22, titleKey: "assessment.section3" },
+  { start: 22, end: 25, titleKey: "assessment.section4" }
+];
 
-const Assessment = () => {
+const NewAssessment = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(0);
-  const [selections, setSelections] = useState<{
-    skills: string[];
-    interests: string[];
-    goals: string[];
-  }>({
-    skills: [],
-    interests: [],
-    goals: []
-  });
+  const { t, language } = useLanguage();
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<Record<string, any>>({});
 
-  const steps = ["Skills", "Interests", "Goals"];
-  const progress = ((step + 1) / steps.length) * 100;
+  const question = ASSESSMENT_QUESTIONS[currentQuestion];
+  const progress = ((currentQuestion + 1) / ASSESSMENT_QUESTIONS.length) * 100;
+  
+  const currentSection = SECTIONS.find(
+    (s) => currentQuestion >= s.start && currentQuestion < s.end
+  );
 
-  const handleSelect = (category: "skills" | "interests" | "goals", id: string) => {
-    setSelections((prev) => {
-      const current = prev[category];
-      if (current.includes(id)) {
-        return { ...prev, [category]: current.filter((item) => item !== id) };
-      } else {
-        return { ...prev, [category]: [...current, id] };
-      }
-    });
+  const handleAnswer = (value: any) => {
+    setAnswers((prev) => ({
+      ...prev,
+      [question.id]: value
+    }));
   };
 
   const handleNext = () => {
-    const currentCategory = ["skills", "interests", "goals"][step] as keyof typeof selections;
-    if (selections[currentCategory].length === 0) {
-      toast.error(`Please select at least one ${steps[step].toLowerCase()}`);
+    // Always check current question first
+    if (!answers[question.id]) {
+      toast.error(t("assessment.selectError"));
       return;
     }
-    if (step < steps.length - 1) {
-      setStep(step + 1);
+
+    // Check if all questions up to current are answered
+    const unansweredQuestions = ASSESSMENT_QUESTIONS.slice(0, currentQuestion + 1)
+      .filter(q => !answers[q.id]);
+    
+    if (unansweredQuestions.length > 0) {
+      toast.error(
+        language === 'ar' 
+          ? `يوجد ${unansweredQuestions.length} سؤال لم يتم الإجابة عليه` 
+          : `${unansweredQuestions.length} question(s) not answered`
+      );
+      return;
+    }
+
+    if (currentQuestion < ASSESSMENT_QUESTIONS.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
     } else {
+      // Final check: ALL questions must be answered
+      const allUnanswered = ASSESSMENT_QUESTIONS.filter(q => !answers[q.id]);
+      if (allUnanswered.length > 0) {
+        toast.error(
+          language === 'ar' 
+            ? `يجب الإجابة على جميع الأسئلة أولاً. المتبقي: ${allUnanswered.length}` 
+            : `Please answer all ${allUnanswered.length} remaining questions`
+        );
+        // Go to first unanswered question
+        const firstUnanswered = ASSESSMENT_QUESTIONS.findIndex(q => !answers[q.id]);
+        if (firstUnanswered >= 0) {
+          setCurrentQuestion(firstUnanswered);
+        }
+        return;
+      }
       calculateResults();
     }
   };
 
-  const calculateResults = () => {
-    const scores: Record<string, number> = {
-      ai: 0,
-      web: 0,
-      cyber: 0,
-      design: 0,
-      business: 0
-    };
-
-    // Calculate from skills
-    selections.skills.forEach((skillId) => {
-      const question = QUESTIONS.skills.find((q) => q.id === skillId);
-      if (question && SKILL_MAP[question.skill]) {
-        SKILL_MAP[question.skill].forEach((track) => {
-          scores[track] += 2;
-        });
-      }
-    });
-
-    // Calculate from interests
-    selections.interests.forEach((interestId) => {
-      const question = QUESTIONS.interests.find((q) => q.id === interestId);
-      if (question) {
-        question.tracks.forEach((track) => {
-          scores[track] += 3;
-        });
-      }
-    });
-
-    // Calculate from goals
-    selections.goals.forEach((goalId) => {
-      const question = QUESTIONS.goals.find((q) => q.id === goalId);
-      if (question) {
-        question.tracks.forEach((track) => {
-          scores[track] += 2;
-        });
-      }
-    });
-
-    // Get top 2 tracks
-    const sortedTracks = Object.entries(scores)
-      .sort(([, a], [, b]) => b - a)
-      .map(([track]) => track);
-
-    const primaryTrack = sortedTracks[0];
-    const secondaryTrack = sortedTracks[1];
-
-    // Save results
-    const results = {
-      primaryTrack,
-      secondaryTrack,
-      selectedSkills: selections.skills,
-      completedCourses: [],
-      progress: 0,
-      lastVisit: new Date().toISOString()
-    };
-
-    localStorage.setItem("eduMentorResults", JSON.stringify(results));
-    toast.success("Assessment completed! Redirecting to your dashboard...");
-    
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1500);
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
   };
 
-  const currentQuestions =
-    step === 0
-      ? QUESTIONS.skills
-      : step === 1
-      ? QUESTIONS.interests
-      : QUESTIONS.goals;
+  const calculateResults = async () => {
+    try {
+      // Get authentication session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        toast.error(t("auth.loginRequired"));
+        navigate("/auth");
+        return;
+      }
 
-  const currentCategory = ["skills", "interests", "goals"][step] as keyof typeof selections;
+      toast.info(t("assessment.calculating"));
+
+      // Convert answers to the format expected by the edge function
+      const formattedAnswers = Object.entries(answers).map(([id, value]) => {
+        const question = ASSESSMENT_QUESTIONS.find(q => q.id === id);
+        return {
+          id,
+          value: value,
+          category: question?.skills?.[0]?.toLowerCase().replace(/ /g, '_') || 'general',
+          tracks: question?.tracks || {}
+        };
+      });
+
+      // Call the assessment-cat edge function for server-side validation
+      const { data, error } = await supabase.functions.invoke('assessment-cat', {
+        body: { 
+          user_id: session.user.id,
+          answers: formattedAnswers,
+          track: 'general',
+          maxQuestions: 25,
+          stopAt: 0.85
+        }
+      });
+
+      if (error) {
+        console.error('Assessment error:', error);
+        toast.error(t("assessment.error"));
+        return;
+      }
+
+      console.log('Assessment completed:', data);
+      toast.success(t("assessment.success"));
+      
+      // Results are now saved in the database by the edge function
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (error) {
+      console.error('Assessment error:', error);
+      toast.error(t("assessment.error"));
+    }
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-12">
       <div className="container mx-auto px-4 max-w-4xl">
         <div className="mb-8 animate-fade-in">
-          <h1 className="text-4xl font-bold mb-2">Career Assessment</h1>
+          <h1 className="text-4xl font-bold mb-2">{t("assessment.title")}</h1>
           <p className="text-muted-foreground">
-            Step {step + 1} of {steps.length}: {steps[step]}
+            {t("assessment.stepOf")} {currentQuestion + 1} {t("assessment.from")} {ASSESSMENT_QUESTIONS.length}
           </p>
+          {currentSection && (
+            <p className="text-primary font-medium mt-2">
+              {t(currentSection.titleKey)}
+            </p>
+          )}
           <Progress value={progress} className="mt-4 h-2" />
         </div>
 
         <Card className="p-8 glass border-border animate-slide-up">
-          <h2 className="text-2xl font-semibold mb-6">
-            {step === 0 && "Select your top skills"}
-            {step === 1 && "What interests you most?"}
-            {step === 2 && "What are your career goals?"}
+          <h2 className="text-2xl font-semibold mb-8">
+            {t(question.textKey)}
           </h2>
 
-          <div className="grid gap-4 mb-8">
-            {currentQuestions.map((question, index) => (
-              <button
-                key={question.id}
-                onClick={() => handleSelect(currentCategory, question.id)}
-                className={`p-6 rounded-xl border-2 transition-all text-left hover:scale-[1.02] ${
-                  selections[currentCategory].includes(question.id)
-                    ? "border-primary bg-primary/10 shadow-glow"
-                    : "border-border glass hover:border-primary/50"
-                }`}
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-medium">{question.label}</span>
-                  {selections[currentCategory].includes(question.id) && (
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                  )}
+          <div className="mb-12">
+            {question.type === "scale" && (
+              <div className="space-y-6">
+                <Slider
+                  value={[answers[question.id] || 3]}
+                  onValueChange={(value) => handleAnswer(value[0])}
+                  max={5}
+                  min={1}
+                  step={1}
+                  className="w-full"
+                />
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>{language === "ar" ? "ضعيف جدًا" : "Very Low"}</span>
+                  <span>{language === "ar" ? "ضعيف" : "Low"}</span>
+                  <span>{language === "ar" ? "متوسط" : "Medium"}</span>
+                  <span>{language === "ar" ? "جيد" : "High"}</span>
+                  <span>{language === "ar" ? "ممتاز" : "Very High"}</span>
                 </div>
-              </button>
-            ))}
+              </div>
+            )}
+
+            {question.type === "select" && question.options && (
+              <RadioGroup
+                value={answers[question.id]}
+                onValueChange={handleAnswer}
+                className="space-y-4"
+              >
+                {question.options.map((option) => (
+                  <div key={option.value} className="flex items-center space-x-3 space-x-reverse">
+                    <RadioGroupItem value={option.value} id={option.value} />
+                    <Label
+                      htmlFor={option.value}
+                      className="text-lg cursor-pointer flex-1 p-4 rounded-lg border border-border hover:bg-accent/10 transition-colors"
+                    >
+                      {t(option.labelKey)}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            )}
+
+            {question.type === "multiselect" && question.options && (
+              <div className="space-y-4">
+                {question.options.map((option) => (
+                  <div key={option.value} className="flex items-center space-x-3 space-x-reverse">
+                    <Checkbox
+                      id={option.value}
+                      checked={answers[question.id]?.includes(option.value)}
+                      onCheckedChange={(checked) => {
+                        const current = answers[question.id] || [];
+                        if (checked) {
+                          handleAnswer([...current, option.value]);
+                        } else {
+                          handleAnswer(current.filter((v: string) => v !== option.value));
+                        }
+                      }}
+                    />
+                    <Label
+                      htmlFor={option.value}
+                      className="text-lg cursor-pointer flex-1 p-4 rounded-lg border border-border hover:bg-accent/10 transition-colors"
+                    >
+                      {t(option.labelKey)}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between">
             <Button
               variant="outline"
-              onClick={() => setStep(Math.max(0, step - 1))}
-              disabled={step === 0}
+              onClick={handlePrevious}
+              disabled={currentQuestion === 0}
               className="border-border"
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
-              Previous
+              {t("assessment.previous")}
             </Button>
             <Button
               onClick={handleNext}
               className="bg-gradient-primary shadow-glow"
             >
-              {step === steps.length - 1 ? "Complete Assessment" : "Next"}
+              {currentQuestion === ASSESSMENT_QUESTIONS.length - 1
+                ? t("assessment.complete")
+                : t("assessment.next")}
               <ChevronRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
@@ -214,4 +258,4 @@ const Assessment = () => {
   );
 };
 
-export default Assessment;
+export default NewAssessment;

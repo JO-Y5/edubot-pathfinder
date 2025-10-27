@@ -45,6 +45,7 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
 
             <Link to="/assessment/start">
               <Button variant="ghost" size="sm">
+                <ClipboardList className="w-4 h-4 mr-2" />
                 <span>{t("nav_assessment")}</span>
               </Button>
             </Link>

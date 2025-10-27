@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot, Moon, Sun, Languages, CreditCard, Shield, BarChart2, FileText, Trophy } from "lucide-react";
+import { Home, ClipboardList, LayoutDashboard, BookOpen, Award, Settings, Bot, Moon, Sun, Languages, CreditCard, Shield, BarChart2, FileText, Trophy, Package, MessageSquare, FlaskConical } from "lucide-react";
 import { NotificationBell } from './NotificationBell';
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,9 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
     { path: "/admin/advanced", icon: BarChart2, label: "Advanced" },
     { path: "/invoices", icon: FileText, label: "Invoices" },
     { path: "/analytics", icon: BarChart2, label: "Analytics" },
-    { path: "/ab-testing", icon: Settings, label: "A/B Tests" },
+    { path: "/ab-testing", icon: FlaskConical, label: "A/B Tests" },
+    { path: "/providers", icon: Package, label: "Providers" },
+    { path: "/reviews", icon: MessageSquare, label: "Reviews" },
     { path: "/settings", icon: Settings, label: t("nav.settings") },
   ];
 

@@ -122,6 +122,58 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="container mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold mb-4">ماذا يقول مستخدمونا</h2>
+          <p className="text-xl text-muted-foreground">آراء المتعلمين الذين حققوا أهدافهم معنا</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="glass rounded-2xl p-8">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center">
+                <span className="text-lg font-bold">أ</span>
+              </div>
+              <div>
+                <div className="font-semibold">أحمد محمد</div>
+                <div className="text-sm text-muted-foreground">مطور برمجيات</div>
+              </div>
+            </div>
+            <p className="text-muted-foreground">
+              "منصة رائعة ساعدتني في اختيار المسار المناسب. التوصيات كانت دقيقة جداً والمحتوى متنوع."
+            </p>
+          </div>
+          <div className="glass rounded-2xl p-8">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center">
+                <span className="text-lg font-bold">ف</span>
+              </div>
+              <div>
+                <div className="font-semibold">فاطمة علي</div>
+                <div className="text-sm text-muted-foreground">محللة بيانات</div>
+              </div>
+            </div>
+            <p className="text-muted-foreground">
+              "التقييم الذكي ساعدني على فهم نقاط قوتي وضعفي. الآن أنا في طريقي لتحقيق أهدافي المهنية."
+            </p>
+          </div>
+          <div className="glass rounded-2xl p-8">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center">
+                <span className="text-lg font-bold">س</span>
+              </div>
+              <div>
+                <div className="font-semibold">سارة خالد</div>
+                <div className="text-sm text-muted-foreground">مصممة UX/UI</div>
+              </div>
+            </div>
+            <p className="text-muted-foreground">
+              "أفضل منصة لتوجيه المسار التعليمي. الواجهة سهلة والدعم ممتاز. أنصح بها بشدة!"
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="container mx-auto px-4 py-20">
         <div className="glass rounded-3xl p-12 text-center relative overflow-hidden">

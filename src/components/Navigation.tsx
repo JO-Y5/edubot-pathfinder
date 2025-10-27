@@ -22,18 +22,10 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
 
   const navItems = [
     { path: "/", icon: Home, label: t("nav_home") },
-    { path: "/assessment", icon: ClipboardList, label: t("nav_assessment") },
+    { path: "/assessment/start", icon: ClipboardList, label: t("nav_assessment") },
     { path: "/dashboard", icon: LayoutDashboard, label: t("nav_dashboard") },
     { path: "/courses", icon: BookOpen, label: t("nav_courses") },
-    { path: "/achievements", icon: Award, label: t("nav_achievements") },
-    { path: "/billing", icon: CreditCard, label: "Billing" },
-    { path: "/admin", icon: Shield, label: "Admin" },
-    { path: "/admin/advanced", icon: BarChart2, label: "Advanced" },
-    { path: "/invoices", icon: FileText, label: "Invoices" },
-    { path: "/analytics", icon: BarChart2, label: "Analytics" },
-    { path: "/ab-testing", icon: FlaskConical, label: "A/B Tests" },
-    { path: "/providers", icon: Package, label: "Providers" },
-    { path: "/reviews", icon: MessageSquare, label: "Reviews" },
+    { path: "/pricing", icon: CreditCard, label: t("nav_pricing") },
     { path: "/settings", icon: Settings, label: t("nav_settings") },
   ];
 
@@ -59,45 +51,55 @@ export const Navigation = ({ onOpenBot }: NavigationProps) => {
                     variant="ghost"
                     size="sm"
                     className={cn(
-                      "relative",
+                      "relative hidden md:flex",
                       isActive && "bg-primary/10 text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary"
                     )}
                   >
                     <Icon className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">{item.label}</span>
+                    <span className="hidden lg:inline">{item.label}</span>
                   </Button>
                 </Link>
               );
             })}
             
-            <Button
-              onClick={toggleTheme}
-              variant="ghost"
-              size="sm"
-            >
-              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-            </Button>
+            <div className="flex items-center gap-2 border-l border-border pl-2 ml-2">
+              <Button
+                onClick={toggleTheme}
+                variant="ghost"
+                size="sm"
+                title={theme === "dark" ? "Light Mode" : "Dark Mode"}
+              >
+                {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </Button>
 
-            <Button
-              onClick={() => i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar')}
-              variant="ghost"
-              size="sm"
-              title={i18n.language === 'ar' ? 'English' : 'عربي'}
-            >
-              <Languages className="w-4 h-4" />
-            </Button>
+              <Button
+                onClick={() => {
+                  const newLang = i18n.language === 'ar' ? 'en' : 'ar';
+                  i18n.changeLanguage(newLang);
+                  document.documentElement.setAttribute('dir', newLang === 'ar' ? 'rtl' : 'ltr');
+                }}
+                variant="default"
+                size="sm"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                title={i18n.language === 'ar' ? 'Switch to English' : 'التبديل للعربية'}
+              >
+                <Languages className="w-4 h-4 mr-1" />
+                <span className="text-xs font-bold">
+                  {i18n.language === 'ar' ? 'EN' : 'عر'}
+                </span>
+              </Button>
 
-            {user && <FeedbackDialog />}
-            {user && <NotificationBell />}
+              {user && <NotificationBell />}
 
-            <Button
-              size="sm"
-              className="bg-gradient-primary shadow-glow"
-              onClick={onOpenBot}
-            >
-              <Bot className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">{t("nav_askBot")}</span>
-            </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={onOpenBot}
+              >
+                <Bot className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">{t("nav_askBot")}</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

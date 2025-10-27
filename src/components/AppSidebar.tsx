@@ -31,6 +31,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
   const { user } = useAuth();
   const isAr = i18n.language === 'ar';
   const collapsed = state === "collapsed";
+  // Force reload for translations
 
   const mainItems = [
     { path: "/", icon: Home, label: t("nav_home"), show: true },

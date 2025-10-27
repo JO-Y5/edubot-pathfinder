@@ -5,12 +5,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
+import { AppSidebar } from "@/components/AppSidebar";
 import { Footer } from "@/components/Footer";
 import { EduBot } from "@/components/EduBot";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { OrgProvider } from "@/contexts/OrgContext";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import "@/i18n/config";
 import { useTranslation } from "react-i18next";
 import Home from "./pages/Home";
@@ -54,44 +56,54 @@ function AppContent() {
   }, [i18n.language]);
 
   return (
-    <>
-      <Toaster />
-      <Sonner />
-      <Navigation onOpenBot={() => setIsBotOpen(true)} />
-      <EduBot isOpen={isBotOpen} onClose={() => setIsBotOpen(false)} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/assessment" element={<Assessment />} />
-        <Route path="/assessment/start" element={<AssessmentStart />} />
-        <Route path="/assessment/questions" element={<AssessmentQuestions />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/achievements" element={<Achievements />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/coach" element={<Coach />} />
-        <Route path="/billing" element={<Billing />} />
-        <Route path="/pricing" element={<Pricing />} />
-        <Route path="/admin" element={<AdminConsole />} />
-        <Route path="/admin/advanced" element={<AdminAdvanced />} />
-        <Route path="/invoices" element={<Invoices />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/ab-testing" element={<ABTesting />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
-        <Route path="/certificates" element={<Certificates />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/help" element={<HelpCenter />} />
-        <Route path="/privacy" element={<LegalPrivacy />} />
-        <Route path="/terms" element={<LegalTerms />} />
-        <Route path="/providers" element={<Providers />} />
-        <Route path="/reviews" element={<Reviews />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Footer />
-    </>
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar onOpenBot={() => setIsBotOpen(true)} />
+        
+        <div className="flex-1 flex flex-col w-full">
+          <Toaster />
+          <Sonner />
+          <Navigation />
+          <EduBot isOpen={isBotOpen} onClose={() => setIsBotOpen(false)} />
+          
+          <main className="flex-1 pt-16">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/assessment" element={<Assessment />} />
+              <Route path="/assessment/start" element={<AssessmentStart />} />
+              <Route path="/assessment/questions" element={<AssessmentQuestions />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/courses" element={<Courses />} />
+              <Route path="/achievements" element={<Achievements />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/coach" element={<Coach />} />
+              <Route path="/billing" element={<Billing />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/admin" element={<AdminConsole />} />
+              <Route path="/admin/advanced" element={<AdminAdvanced />} />
+              <Route path="/invoices" element={<Invoices />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/ab-testing" element={<ABTesting />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="/certificates" element={<Certificates />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/help" element={<HelpCenter />} />
+              <Route path="/privacy" element={<LegalPrivacy />} />
+              <Route path="/terms" element={<LegalTerms />} />
+              <Route path="/providers" element={<Providers />} />
+              <Route path="/reviews" element={<Reviews />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+          
+          <Footer />
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }
 

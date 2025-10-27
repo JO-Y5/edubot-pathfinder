@@ -51,7 +51,7 @@ export default function Home() {
               </Link>
             ) : (
               <>
-                <Link to="/assessment/start">
+                <Link to="/assessment">
                   <Button size="lg" className="bg-gradient-primary shadow-glow text-lg px-8 group">
                     {t('cta_start')}
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -222,7 +222,7 @@ export default function Home() {
                 ? 'انضم إلى آلاف المتعلمين واكتشف مسارك المهني المثالي'
                 : 'Join thousands of learners and discover your ideal career path'}
             </p>
-            <Link to={user ? "/dashboard" : "/assessment/start"}>
+            <Link to={user ? "/dashboard" : "/assessment"}>
               <Button size="lg" className="bg-gradient-primary shadow-glow text-lg px-8">
                 {i18n.language === 'ar' ? 'ابدأ الآن' : 'Get Started'}
                 <ArrowRight className="ml-2 w-5 h-5" />

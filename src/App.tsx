@@ -17,8 +17,6 @@ import "@/i18n/config";
 import { useTranslation } from "react-i18next";
 import Home from "./pages/Home";
 import Assessment from "./pages/Assessment";
-import AssessmentStart from "./pages/AssessmentStart";
-import AssessmentQuestions from "./pages/AssessmentQuestions";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import Achievements from "./pages/Achievements";
@@ -71,8 +69,6 @@ function AppContent() {
               <Route path="/" element={<Home />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/assessment" element={<Assessment />} />
-              <Route path="/assessment/start" element={<AssessmentStart />} />
-              <Route path="/assessment/questions" element={<AssessmentQuestions />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/achievements" element={<Achievements />} />

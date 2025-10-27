@@ -9,7 +9,6 @@ interface Answer {
   id: string;
   value: number | string | string[];
   category?: string;
-  tracks?: Record<string, number>;
 }
 
 interface CATResponse {
@@ -92,24 +91,26 @@ serve(async (req) => {
       'default': { R: 0.16, I: 0.16, A: 0.17, S: 0.17, E: 0.17, C: 0.17 }
     };
 
-    // Track recommendations matching questions.ts tracks (ai, web, cyber, design, business)
+    // Track recommendations based on RIASEC and goals
     const trackMappings: { [key: string]: { riasec: string[], weight: number } } = {
-      'ai': { riasec: ['I', 'R', 'C'], weight: 1.0 },           // AI/ML - Investigative, Realistic, Conventional
-      'web': { riasec: ['R', 'A', 'I'], weight: 0.95 },         // Web Dev - Realistic, Artistic, Investigative
-      'cyber': { riasec: ['I', 'R', 'C'], weight: 0.95 },       // Cybersecurity - Investigative, Realistic, Conventional
-      'design': { riasec: ['A', 'I', 'E'], weight: 0.9 },       // Design - Artistic, Investigative, Enterprising
-      'business': { riasec: ['E', 'C', 'S'], weight: 0.9 }      // Business - Enterprising, Conventional, Social
+      'computer_science': { riasec: ['I', 'R', 'C'], weight: 1.0 },
+      'engineering': { riasec: ['R', 'I', 'C'], weight: 1.0 },
+      'medicine': { riasec: ['I', 'S', 'R'], weight: 0.9 },
+      'business': { riasec: ['E', 'C', 'S'], weight: 0.9 },
+      'design': { riasec: ['A', 'I', 'E'], weight: 0.85 },
+      'education': { riasec: ['S', 'A', 'C'], weight: 0.8 },
+      'arts': { riasec: ['A', 'S', 'E'], weight: 0.8 },
+      'science': { riasec: ['I', 'R', 'C'], weight: 0.9 },
+      'social_sciences': { riasec: ['S', 'I', 'A'], weight: 0.8 },
+      'law': { riasec: ['E', 'I', 'C'], weight: 0.85 }
     };
 
     // Process each answer with sophisticated scoring
     let scaleCount = 0;
     let scaleSum = 0;
     
-    // Also track direct answers to calculate track scores
-    const trackScores: { [key: string]: number } = { ai: 0, web: 0, cyber: 0, design: 0, business: 0 };
-    
     answers.forEach((answer: Answer) => {
-      const category = answer.category || 'default';
+      const category = answer.id.split('_')[0] + '_' + (answer.id.split('_')[1] || 'default');
       const weights = categoryRIASEC[category] || categoryRIASEC['default'];
       
       // Handle different answer types
@@ -123,15 +124,6 @@ serve(async (req) => {
         Object.entries(weights).forEach(([key, weight]) => {
           riasec[key as keyof typeof riasec] += normalizedValue * (weight || 0);
         });
-        
-        // Add to direct track scores from question metadata
-        if (answer.tracks) {
-          Object.entries(answer.tracks).forEach(([track, weight]) => {
-            if (trackScores[track] !== undefined && typeof answer.value === 'number') {
-              trackScores[track] += answer.value * (weight as number) * 0.2;
-            }
-          });
-        }
         
         // Big5 mapping
         if (category.includes('openness') || category.includes('tech_interest')) {
@@ -154,15 +146,6 @@ serve(async (req) => {
           riasec[key as keyof typeof riasec] += optionValue * (weight || 0);
         });
         
-        // Add to track scores
-        if (answer.tracks) {
-          Object.entries(answer.tracks).forEach(([track, weight]) => {
-            if (trackScores[track] !== undefined) {
-              trackScores[track] += (weight as number) * 4;
-            }
-          });
-        }
-        
       } else if (Array.isArray(answer.value)) {
         // Multi-choice questions
         const optionValue = 0.6 / answer.value.length; // Distributed across choices
@@ -171,15 +154,6 @@ serve(async (req) => {
             riasec[key as keyof typeof riasec] += optionValue * (weight || 0);
           });
         });
-        
-        // Add to track scores
-        if (answer.tracks) {
-          Object.entries(answer.tracks).forEach(([track, weight]) => {
-            if (trackScores[track] !== undefined && Array.isArray(answer.value)) {
-              trackScores[track] += answer.value.length * (weight as number) * 0.5;
-            }
-          });
-        }
       }
     });
 
@@ -199,20 +173,14 @@ serve(async (req) => {
       });
     }
 
-    // Calculate track scores based on RIASEC profile (70%) + direct answer weights (30%)
+    // Calculate track scores based on RIASEC profile
     Object.entries(trackMappings).forEach(([trackName, mapping]) => {
-      let riasecScore = 0;
+      let score = 0;
       mapping.riasec.forEach((code, index) => {
         const weight = index === 0 ? 0.5 : (index === 1 ? 0.3 : 0.2);
-        riasecScore += riasec[code as keyof typeof riasec] * weight;
+        score += riasec[code as keyof typeof riasec] * weight;
       });
-      
-      // Combine RIASEC score with direct track weights from questions
-      const directScore = trackScores[trackName] || 0;
-      const maxDirectScore = answers.length * 5; // max possible if all questions weighted
-      const normalizedDirect = maxDirectScore > 0 ? directScore / maxDirectScore : 0;
-      
-      tracks[trackName] = (riasecScore * 0.7 + normalizedDirect * 0.3) * mapping.weight;
+      tracks[trackName] = score * mapping.weight;
     });
 
     // Calculate confidence

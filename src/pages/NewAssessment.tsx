@@ -11,6 +11,7 @@ import { ChevronRight, ChevronLeft } from "lucide-react";
 import { ASSESSMENT_QUESTIONS } from "@/data/questions";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const SECTIONS = [
   { start: 0, end: 10, titleKey: "assessment.section1" },
@@ -58,48 +59,56 @@ const NewAssessment = () => {
     }
   };
 
-  const calculateResults = () => {
-    const scores: Record<string, number> = {
-      ai: 0,
-      web: 0,
-      cyber: 0,
-      design: 0,
-      business: 0
-    };
-
-    ASSESSMENT_QUESTIONS.forEach((q) => {
-      const answer = answers[q.id];
-      if (!answer) return;
-
-      let weight = 1;
-      if (q.type === "scale") {
-        weight = answer / 5; // Scale from 0-1
+  const calculateResults = async () => {
+    try {
+      // Get authentication session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        toast.error(t("auth.loginRequired"));
+        navigate("/auth");
+        return;
       }
 
-      Object.entries(q.tracks).forEach(([track, points]) => {
-        scores[track] += points * weight;
+      toast.info(t("assessment.calculating"));
+
+      // Convert answers to the format expected by the edge function
+      const formattedAnswers = Object.entries(answers).map(([id, value]) => ({
+        id,
+        value: value,
+        category: ASSESSMENT_QUESTIONS.find(q => q.id === id)?.tracks 
+          ? Object.keys(ASSESSMENT_QUESTIONS.find(q => q.id === id)!.tracks)[0] 
+          : 'general'
+      }));
+
+      // Call the assessment-cat edge function for server-side validation
+      const { data, error } = await supabase.functions.invoke('assessment-cat', {
+        body: { 
+          user_id: session.user.id,
+          answers: formattedAnswers,
+          track: 'general',
+          maxQuestions: 25,
+          stopAt: 0.85
+        }
       });
-    });
 
-    const sortedTracks = Object.entries(scores)
-      .sort(([, a], [, b]) => b - a)
-      .map(([track]) => track);
+      if (error) {
+        console.error('Assessment error:', error);
+        toast.error(t("assessment.error"));
+        return;
+      }
 
-    const results = {
-      primaryTrack: sortedTracks[0],
-      secondaryTrack: sortedTracks[1],
-      selectedSkills: [],
-      completedCourses: [],
-      progress: 0,
-      lastVisit: new Date().toISOString()
-    };
-
-    localStorage.setItem("eduMentorResults", JSON.stringify(results));
-    toast.success("Assessment completed! Redirecting to your dashboard...");
-    
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 1500);
+      console.log('Assessment completed:', data);
+      toast.success(t("assessment.success"));
+      
+      // Results are now saved in the database by the edge function
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+    } catch (error) {
+      console.error('Assessment error:', error);
+      toast.error(t("assessment.error"));
+    }
   };
 
   return (

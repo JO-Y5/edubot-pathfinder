@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   role: "user" | "bot";
@@ -42,12 +43,22 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
     setIsLoading(true);
 
     try {
+      // Get authentication session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        toast.error("يرجى تسجيل الدخول لاستخدام المساعد الذكي");
+        setIsLoading(false);
+        return;
+      }
+
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/edubot-chat`;
       
       const response = await fetch(CHAT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ 
           messages: [...messages.map(m => ({ role: m.role === "bot" ? "assistant" : "user", content: m.content })), { role: "user", content: userMessage.content }]

@@ -20,15 +20,68 @@ interface Results {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [results, setResults] = useState<Results | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     updatePageSEO(pageSEO.dashboard);
-    const saved = localStorage.getItem("eduMentorResults");
-    if (saved) {
-      setResults(JSON.parse(saved));
-    }
-  }, []);
+    
+    const fetchAssessmentResults = async () => {
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
+
+      try {
+        // Fetch from database instead of localStorage
+        const { data, error } = await supabase
+          .from('assessment_results')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (error) {
+          console.error('Error fetching results:', error);
+        }
+
+        if (data) {
+          // Convert database format to component format
+          const formattedResults = {
+            primaryTrack: data.track_id,
+            secondaryTrack: data.track_id, // You may want to store secondary track in DB
+            completedCourses: [],
+            progress: 0
+          };
+          setResults(formattedResults);
+        } else {
+          // Fallback to localStorage for backward compatibility
+          const saved = localStorage.getItem("eduMentorResults");
+          if (saved) {
+            setResults(JSON.parse(saved));
+          }
+        }
+      } catch (error) {
+        console.error('Error loading results:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssessmentResults();
+  }, [user, navigate]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center">
+        <Card className="p-12 text-center glass max-w-md">
+          <p className="text-muted-foreground">Loading your dashboard...</p>
+        </Card>
+      </div>
+    );
+  }
 
   if (!results) {
     return (

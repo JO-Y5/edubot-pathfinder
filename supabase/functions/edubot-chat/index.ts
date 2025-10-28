@@ -49,7 +49,7 @@ serve(async (req) => {
           },
           ...messages,
         ],
-        stream: true,
+        stream: false,
       }),
     });
 
@@ -83,9 +83,15 @@ serve(async (req) => {
       );
     }
 
-    return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
-    });
+    const data = await response.json();
+    const message = data.choices?.[0]?.message?.content || "لا يوجد رد";
+
+    return new Response(
+      JSON.stringify({ message }), 
+      {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }
+    );
   } catch (error) {
     console.error("Chat error:", error);
     return new Response(

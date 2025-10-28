@@ -109,5 +109,14 @@
     "providers": "مقدمو الخدمة",
     "reviews": "التقييمات",
     "coach": "المدرب"
-  }
+  },
+  "nav_help": "مركز المساعدة",
+  "nav_terms": "الشروط",
+  "nav_privacy": "الخصوصية",
+  "drawer_more": "المزيد",
+  "close": "إغلاق",
+  "chat": "دردشة",
+  "voice": "صوت",
+  "type_message": "اكتب رسالتك...",
+  "speak_to_assistant": "تحدث مع المساعد"
 }

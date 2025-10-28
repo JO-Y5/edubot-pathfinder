@@ -35,7 +35,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
 
   const mainItems = [
     { path: "/", icon: Home, label: t("nav_home"), show: true },
-    { path: "/assessment", icon: ClipboardList, label: t("nav_assessment"), show: true },
+    { path: "/assessment/start", icon: ClipboardList, label: t("nav_assessment"), show: true },
     { path: "/dashboard", icon: LayoutDashboard, label: t("nav_dashboard"), show: true },
     { path: "/courses", icon: BookOpen, label: t("nav_courses"), show: true },
     { path: "/achievements", icon: Award, label: t("nav_achievements"), show: true },

@@ -109,5 +109,14 @@
     "providers": "Providers",
     "reviews": "Reviews",
     "coach": "Coach"
-  }
+  },
+  "nav_help": "Help Center",
+  "nav_terms": "Terms",
+  "nav_privacy": "Privacy",
+  "drawer_more": "More",
+  "close": "Close",
+  "chat": "Chat",
+  "voice": "Voice",
+  "type_message": "Type your message...",
+  "speak_to_assistant": "Speak to the assistant"
 }

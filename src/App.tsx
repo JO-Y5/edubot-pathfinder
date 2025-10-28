@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navigation } from "@/components/Navigation";
+import Navigation from "@/components/Navigation";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Footer } from "@/components/Footer";
 import { EduBot } from "@/components/EduBot";
@@ -17,6 +17,8 @@ import "@/i18n/config";
 import { useTranslation } from "react-i18next";
 import Home from "./pages/Home";
 import Assessment from "./pages/Assessment";
+import AssessmentStart from "./pages/AssessmentStart";
+import AssessmentQuestions from "./pages/AssessmentQuestions";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import Achievements from "./pages/Achievements";
@@ -61,7 +63,7 @@ function AppContent() {
         <div className="flex-1 flex flex-col w-full">
           <Toaster />
           <Sonner />
-          <Navigation onOpenBot={() => setIsBotOpen(true)} />
+          <Navigation />
           <EduBot isOpen={isBotOpen} onClose={() => setIsBotOpen(false)} />
           
           <main className="flex-1 pt-16">
@@ -69,6 +71,8 @@ function AppContent() {
               <Route path="/" element={<Home />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/assessment" element={<Assessment />} />
+              <Route path="/assessment/start" element={<AssessmentStart />} />
+              <Route path="/assessment/questions" element={<AssessmentQuestions />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/achievements" element={<Achievements />} />
@@ -88,8 +92,8 @@ function AppContent() {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/help" element={<HelpCenter />} />
-              <Route path="/privacy" element={<LegalPrivacy />} />
-              <Route path="/terms" element={<LegalTerms />} />
+              <Route path="/legal/privacy" element={<LegalPrivacy />} />
+              <Route path="/legal/terms" element={<LegalTerms />} />
               <Route path="/providers" element={<Providers />} />
               <Route path="/reviews" element={<Reviews />} />
               <Route path="*" element={<NotFound />} />

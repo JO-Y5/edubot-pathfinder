@@ -97,7 +97,14 @@ const Dashboard = () => {
         }
 
         if (data && data.answers) {
-          setAssessmentData(data.answers as unknown as AssessmentData);
+          // Extract data from the nested answers structure
+          const answersData = data.answers as any;
+          setAssessmentData({
+            riasec: answersData.riasec_scores || {},
+            tracks: answersData.track_scores || {},
+            confidence: answersData.confidence || 0,
+            recommendations: answersData.recommendations || []
+          });
         }
       } catch (error) {
         console.error('Error loading results:', error);
@@ -151,18 +158,18 @@ const Dashboard = () => {
     );
   }
 
-  const { riasec, tracks, confidence } = assessmentData;
+  const { riasec = {}, tracks = {}, confidence = 0 } = assessmentData;
 
-  // Sort RIASEC
-  const sortedRiasec = Object.entries(riasec)
-    .sort(([, a], [, b]) => b - a)
+  // Sort RIASEC - with safety checks
+  const sortedRiasec = Object.entries(riasec || {})
+    .sort(([, a], [, b]) => (b as number) - (a as number))
     .slice(0, 3);
 
-  // Sort tracks
-  const sortedTracks = Object.entries(tracks)
-    .sort(([, a], [, b]) => b - a);
+  // Sort tracks - with safety checks
+  const sortedTracks = Object.entries(tracks || {})
+    .sort(([, a], [, b]) => (b as number) - (a as number));
 
-  const topTrack = sortedTracks[0];
+  const topTrack = sortedTracks[0] || ['ai', 0.5];
 
   return (
     <div className="min-h-screen py-20 px-4">

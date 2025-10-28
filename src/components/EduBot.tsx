@@ -43,44 +43,47 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
     setIsLoading(true);
 
     try {
-      // Get authentication session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log("Sending message to EduBot...");
       
-      if (sessionError || !session) {
-        toast.error("يرجى تسجيل الدخول لاستخدام المساعد الذكي");
-        setIsLoading(false);
-        return;
-      }
+      // Add empty bot message that will be updated
+      setMessages((prev) => [...prev, { role: "bot", content: "" }]);
 
+      // Get authentication session
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/edubot-chat`;
       
       const response = await fetch(CHAT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.access_token}`,
+          "Authorization": `Bearer ${session?.access_token || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ 
-          messages: [...messages.map(m => ({ role: m.role === "bot" ? "assistant" : "user", content: m.content })), { role: "user", content: userMessage.content }]
+          messages: [
+            ...messages.map(m => ({ 
+              role: m.role === "bot" ? "assistant" : "user", 
+              content: m.content 
+            })), 
+            { role: "user", content: userMessage.content }
+          ]
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
+        console.error("API error:", response.status, errorData);
         throw new Error(errorData?.error || "فشل الاتصال بالذكاء الاصطناعي");
       }
 
       if (!response.body) {
-        throw new Error("فشل الاتصال بالذكاء الاصطناعي");
+        throw new Error("لم يتم استلام رد من الذكاء الاصطناعي");
       }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let textBuffer = "";
       let assistantContent = "";
-
-      // Add empty bot message that will be updated
-      setMessages((prev) => [...prev, { role: "bot", content: "" }]);
 
       while (true) {
         const { done, value } = await reader.read();
@@ -115,12 +118,15 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
                 return newMessages;
               });
             }
-          } catch {
+          } catch (e) {
+            console.error("Parse error:", e);
             textBuffer = line + "\n" + textBuffer;
             break;
           }
         }
       }
+
+      console.log("Message sent successfully");
     } catch (error) {
       console.error("Chat error:", error);
       const errorMessage = error instanceof Error ? error.message : "حدث خطأ في الاتصال بالذكاء الاصطناعي";

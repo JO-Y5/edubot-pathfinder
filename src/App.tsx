@@ -16,6 +16,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import "@/i18n/config";
 import { useTranslation } from "react-i18next";
 import Home from "./pages/Home";
+import AssessmentStart from "./pages/AssessmentStart";
 import AssessmentQuestions from "./pages/AssessmentQuestions";
 import AssessmentResults from "./pages/AssessmentResults";
 import Dashboard from "./pages/Dashboard";
@@ -69,7 +70,9 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/assessment" element={<AssessmentQuestions />} />
+              <Route path="/assessment" element={<AssessmentStart />} />
+              <Route path="/assessment/start" element={<AssessmentStart />} />
+              <Route path="/assessment/questions" element={<AssessmentQuestions />} />
               <Route path="/assessment/results" element={<AssessmentResults />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/courses" element={<Courses />} />

@@ -97,11 +97,11 @@ const Dashboard = () => {
         }
 
         if (data && data.answers) {
-          // Extract data from the nested answers structure
+          // Extract data from the complete response structure
           const answersData = data.answers as any;
           setAssessmentData({
-            riasec: answersData.riasec_scores || {},
-            tracks: answersData.track_scores || {},
+            riasec: answersData.riasec || {},
+            tracks: answersData.tracks || {},
             confidence: answersData.confidence || 0,
             recommendations: answersData.recommendations || []
           });

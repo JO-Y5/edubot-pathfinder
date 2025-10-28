@@ -172,8 +172,8 @@ export default function AssessmentQuestions() {
 
       <div className="space-y-6">
         {BANK.map((question: any, idx: number) => {
-          const q = isAr ? question.q_ar : question.q_en;
-          const options = isAr ? question.options_ar : question.options_en;
+          const q = isAr ? (question.q_ar || question.text_ar) : (question.q_en || question.text_en);
+          const options = isAr ? (question.options_ar || question.opts_ar) : (question.options_en || question.opts_en);
           const isAnswered = answers[question.id] !== undefined;
 
           return (
@@ -194,8 +194,8 @@ export default function AssessmentQuestions() {
                   {question.type === 'scale' && (
                     <div className="space-y-4">
                       <Slider
-                        min={question.min}
-                        max={question.max}
+                        min={question.min || 1}
+                        max={question.max || 5}
                         step={1}
                         value={[answers[question.id] || 3]}
                         onValueChange={(value) => handleSliderChange(question.id, value)}

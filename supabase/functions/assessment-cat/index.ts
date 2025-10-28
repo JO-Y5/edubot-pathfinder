@@ -279,14 +279,7 @@ serve(async (req) => {
             user_id: user_id,
             track_id: primaryTrack,
             score: topScore,
-            answers: {
-              riasec_scores: riasec,
-              big5_scores: big5,
-              track_scores: tracks,
-              confidence: response.confidence,
-              recommendations: recommendations,
-              raw_answers: answers
-            }
+            answers: response  // Save the complete response object
           });
 
         if (dbError) {

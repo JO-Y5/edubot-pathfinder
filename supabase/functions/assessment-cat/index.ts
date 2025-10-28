@@ -45,14 +45,14 @@ serve(async (req) => {
   try {
     const { user_id, answers, track = 'uni', maxQuestions = 25, stopAt = 0.85 } = await req.json();
 
-    if (!user_id || !answers || !Array.isArray(answers)) {
+    if (!answers || !Array.isArray(answers)) {
       return new Response(
-        JSON.stringify({ error: 'user_id and answers array are required' }),
+        JSON.stringify({ error: 'answers array is required' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    console.log(`CAT Assessment for user ${user_id}: ${answers.length} answers, track: ${track}`);
+    console.log(`CAT Assessment for user ${user_id || 'anonymous'}: ${answers.length} answers, track: ${track}`);
 
     // Initialize scoring structures
     const riasec = { R: 0, I: 0, A: 0, S: 0, E: 0, C: 0 };
@@ -256,46 +256,50 @@ serve(async (req) => {
       recommendations
     };
 
-    // Save results to database
-    try {
-      const supabaseClient = createClient(
-        Deno.env.get('SUPABASE_URL') ?? '',
-        Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-        {
-          global: {
-            headers: { Authorization: req.headers.get('Authorization')! },
-          },
-        }
-      );
-
-      const primaryTrack = recommendations[0] || 'ai';
-      const topScore = tracks[primaryTrack] || 0;
-      
-      const { error: dbError } = await supabaseClient
-        .from('assessment_results')
-        .insert({
-          user_id: user_id,
-          track_id: primaryTrack,
-          score: topScore,
-          answers: {
-            riasec_scores: riasec,
-            big5_scores: big5,
-            track_scores: tracks,
-            confidence: response.confidence,
-            recommendations: recommendations,
-            raw_answers: answers
+    // Save results to database only if user is logged in
+    if (user_id) {
+      try {
+        const supabaseClient = createClient(
+          Deno.env.get('SUPABASE_URL') ?? '',
+          Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+          {
+            global: {
+              headers: { Authorization: req.headers.get('Authorization')! },
+            },
           }
-        });
+        );
 
-      if (dbError) {
-        console.error('Error saving assessment results:', dbError);
-        // Don't fail the request, just log the error
-      } else {
-        console.log('Assessment results saved successfully for track:', primaryTrack);
+        const primaryTrack = recommendations[0] || 'ai';
+        const topScore = tracks[primaryTrack] || 0;
+        
+        const { error: dbError } = await supabaseClient
+          .from('assessment_results')
+          .insert({
+            user_id: user_id,
+            track_id: primaryTrack,
+            score: topScore,
+            answers: {
+              riasec_scores: riasec,
+              big5_scores: big5,
+              track_scores: tracks,
+              confidence: response.confidence,
+              recommendations: recommendations,
+              raw_answers: answers
+            }
+          });
+
+        if (dbError) {
+          console.error('Error saving assessment results:', dbError);
+          // Don't fail the request, just log the error
+        } else {
+          console.log('Assessment results saved successfully for track:', primaryTrack);
+        }
+      } catch (saveError) {
+        console.error('Error saving to database:', saveError);
+        // Continue with response even if save fails
       }
-    } catch (saveError) {
-      console.error('Error saving to database:', saveError);
-      // Continue with response even if save fails
+    } else {
+      console.log('Skipping database save for anonymous user');
     }
 
     return new Response(

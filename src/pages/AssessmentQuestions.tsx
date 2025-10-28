@@ -9,6 +9,7 @@ import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { Languages } from 'lucide-react';
 
 export default function AssessmentQuestions() {
   const { state } = useLocation() as any;
@@ -134,12 +135,26 @@ export default function AssessmentQuestions() {
     }
   }
 
+  const toggleLanguage = () => {
+    i18n.changeLanguage(i18n.language === 'ar' ? 'en' : 'ar');
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 pt-24 pb-12">
       <div className="mb-8 animate-fade-in">
-        <h1 className="text-3xl font-bold gradient-text mb-2">
-          {isUni ? (t('uni_track_title') ?? 'University Track Assessment') : (t('hs_track_title') ?? 'High School Track Assessment')}
-        </h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold gradient-text">
+            {isUni ? (t('uni_track_title') ?? 'University Track Assessment') : (t('hs_track_title') ?? 'High School Track Assessment')}
+          </h1>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={toggleLanguage}
+            className="rounded-full"
+          >
+            <Languages className="w-5 h-5" />
+          </Button>
+        </div>
         <p className="text-muted-foreground">
           {isAr 
             ? 'أجب على جميع الأسئلة بصدق للحصول على أفضل النتائج'

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Award, BookOpen, TrendingUp, Sparkles, Target, Brain } from "lucide-react";
+import { Award, BookOpen, TrendingUp, Sparkles, Target, Brain, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -214,74 +214,160 @@ const Dashboard = () => {
         </Card>
 
         {/* Grid layout */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* RIASEC Profile */}
-          <Card className="p-6 glass animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Target className="w-5 h-5 text-primary" />
-              {isAr ? 'ملفك الشخصي (RIASEC)' : 'Your RIASEC Profile'}
-            </h3>
-            <div className="space-y-3">
-              {sortedRiasec.map(([code, score], idx) => (
-                <div key={code}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium">
-                      {isAr ? RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.ar : RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.en}
+          <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="w-5 h-5 text-primary" />
+                {isAr ? 'ملفك الشخصي (RIASEC)' : 'Your Personality Profile (RIASEC)'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {sortedRiasec.map(([code, score]) => (
+                <div key={code} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-3 h-3 rounded-full ${RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.color}`} />
+                      <span className="font-medium">
+                        {isAr ? RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.ar : RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.en}
+                      </span>
+                    </div>
+                    <span className="text-sm font-bold text-primary">
+                      {Math.round(score * 100)}%
                     </span>
-                    <span className="text-sm font-bold">{Math.round(score * 100)}%</span>
                   </div>
                   <Progress value={score * 100} className="h-2" />
                 </div>
               ))}
-            </div>
+              <p className="text-xs text-muted-foreground mt-4">
+                {isAr 
+                  ? 'نموذج RIASEC يصنف الشخصيات إلى 6 أنواع لمساعدتك في اختيار المسار المهني المناسب'
+                  : 'RIASEC model classifies personalities into 6 types to help you choose the right career path'}
+              </p>
+            </CardContent>
           </Card>
 
           {/* All Tracks */}
-          <Card className="p-6 glass animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Brain className="w-5 h-5 text-primary" />
-              {isAr ? 'المسارات المهنية' : 'Career Tracks'}
-            </h3>
-            <div className="space-y-4">
-              {sortedTracks.map(([trackId, score], idx) => (
-                <div key={trackId} className="flex items-center gap-3">
-                  <span className="text-3xl">{TRACK_INFO[trackId]?.icon}</span>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium">
+          <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Target className="w-5 h-5 text-primary" />
+                {isAr ? 'جميع المسارات المقترحة' : 'All Recommended Tracks'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {sortedTracks.map(([trackId, score]) => (
+                <div key={trackId} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl">{TRACK_INFO[trackId]?.icon}</span>
+                      <span className="font-medium text-sm">
                         {isAr ? TRACK_INFO[trackId]?.ar : TRACK_INFO[trackId]?.en}
                       </span>
-                      <span className="text-sm font-bold text-primary">{Math.round(score * 100)}%</span>
                     </div>
-                    <Progress value={score * 100} className="h-2" />
+                    <span className="text-sm font-bold text-primary">
+                      {Math.round(score * 100)}%
+                    </span>
                   </div>
+                  <Progress value={score * 100} className="h-2" />
                 </div>
               ))}
-            </div>
+            </CardContent>
           </Card>
         </div>
 
-        {/* Action Buttons */}
-        <div className="mt-8 flex flex-wrap gap-4 justify-center">
+        {/* Next Steps */}
+        <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-primary" />
+              {isAr ? 'الخطوات التالية' : 'Next Steps'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto mb-3 shadow-glow">
+                  <span className="text-2xl">📚</span>
+                </div>
+                <h3 className="font-bold mb-2">
+                  {isAr ? 'استكشف الدورات' : 'Explore Courses'}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  {isAr 
+                    ? 'تصفح الدورات المناسبة لمسارك المهني'
+                    : 'Browse courses matching your career path'}
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/courses')}
+                  className="gap-2"
+                >
+                  {isAr ? 'الدورات' : 'Courses'}
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto mb-3 shadow-glow">
+                  <span className="text-2xl">🏆</span>
+                </div>
+                <h3 className="font-bold mb-2">
+                  {isAr ? 'لوحة الصدارة' : 'Leaderboard'}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  {isAr 
+                    ? 'قارن نتائجك مع المتعلمين الآخرين'
+                    : 'Compare your results with other learners'}
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/leaderboard')}
+                  className="gap-2"
+                >
+                  {isAr ? 'الصدارة' : 'Leaderboard'}
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="text-center">
+                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto mb-3 shadow-glow">
+                  <span className="text-2xl">🔄</span>
+                </div>
+                <h3 className="font-bold mb-2">
+                  {isAr ? 'إعادة التقييم' : 'Retake Assessment'}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  {isAr 
+                    ? 'احصل على نتائج محدثة'
+                    : 'Get updated results'}
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/assessment/start')}
+                  className="gap-2"
+                >
+                  {isAr ? 'إعادة' : 'Retake'}
+                  <ArrowRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* CTA */}
+        <div className="text-center mt-12 animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <Button
+            size="lg"
+            className="bg-gradient-primary shadow-glow text-lg px-12"
             onClick={() => navigate('/courses')}
-            className="bg-gradient-primary shadow-glow"
           >
-            <BookOpen className="w-4 h-4 mr-2" />
-            {isAr ? 'استكشف الدورات' : 'Explore Courses'}
-          </Button>
-          <Button
-            onClick={() => navigate('/leaderboard')}
-            variant="outline"
-          >
-            <Award className="w-4 h-4 mr-2" />
-            {isAr ? 'لوحة الصدارة' : 'Leaderboard'}
-          </Button>
-          <Button
-            onClick={() => navigate('/assessment/start')}
-            variant="outline"
-          >
-            {isAr ? 'إعادة التقييم' : 'Retake Assessment'}
+            {isAr ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}
+            <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
         </div>
       </div>

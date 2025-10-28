@@ -19,6 +19,7 @@ import Home from "./pages/Home";
 import Assessment from "./pages/Assessment";
 import AssessmentStart from "./pages/AssessmentStart";
 import AssessmentQuestions from "./pages/AssessmentQuestions";
+import AssessmentResults from "./pages/AssessmentResults";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
 import Achievements from "./pages/Achievements";
@@ -73,6 +74,7 @@ function AppContent() {
               <Route path="/assessment" element={<Assessment />} />
               <Route path="/assessment/start" element={<AssessmentStart />} />
               <Route path="/assessment/questions" element={<AssessmentQuestions />} />
+              <Route path="/assessment/results" element={<AssessmentResults />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/achievements" element={<Achievements />} />

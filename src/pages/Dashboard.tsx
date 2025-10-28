@@ -195,25 +195,25 @@ const Dashboard = () => {
         </div>
 
         {/* Top Recommendation */}
-        <Card className="mb-8 overflow-hidden border-primary/30 shadow-glow animate-slide-up bg-gradient-to-br from-card to-card/50">
-          <div className="h-3 bg-gradient-primary" />
-          <CardContent className="p-8 md:p-10">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              <div className="text-7xl md:text-8xl">{TRACK_INFO[topTrack[0]]?.icon || '🎯'}</div>
+        <Card className="mb-10 overflow-hidden border-2 border-primary/40 shadow-glow animate-slide-up bg-gradient-to-br from-card via-card to-primary/5">
+          <div className="h-4 bg-gradient-primary shadow-glow" />
+          <CardContent className="p-10 md:p-12">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+              <div className="text-8xl md:text-9xl drop-shadow-lg">{TRACK_INFO[topTrack[0]]?.icon || '🎯'}</div>
               <div className="flex-1 text-center md:text-start">
-                <Badge className="mb-4 bg-gradient-primary text-base px-4 py-2 shadow-glow">
-                  {isAr ? 'المسار الأنسب لك' : 'Best Match For You'}
+                <Badge className="mb-5 text-base px-5 py-2 shadow-glow text-primary-foreground">
+                  {isAr ? '⭐ المسار الأنسب لك' : '⭐ Best Match For You'}
                 </Badge>
-                <h2 className="text-3xl md:text-4xl font-bold mb-3 gradient-text">
+                <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
                   {isAr ? TRACK_INFO[topTrack[0]]?.ar : TRACK_INFO[topTrack[0]]?.en}
                 </h2>
-                <p className="text-muted-foreground mb-6 text-lg">
+                <p className="text-muted-foreground mb-8 text-lg md:text-xl">
                   {isAr ? TRACK_INFO[topTrack[0]]?.desc_ar : TRACK_INFO[topTrack[0]]?.desc_en}
                 </p>
-                <Progress value={topTrack[1] * 100} className="h-4 mb-3" />
-                <p className="text-base text-muted-foreground">
+                <Progress value={topTrack[1] * 100} className="h-5 mb-4 shadow-md" />
+                <p className="text-lg text-muted-foreground">
                   {isAr ? 'نسبة التطابق:' : 'Match Score:'}{' '}
-                  <span className="font-bold text-primary text-xl">{Math.round(topTrack[1] * 100)}%</span>
+                  <span className="font-bold text-primary text-2xl">{Math.round(topTrack[1] * 100)}%</span>
                 </p>
               </div>
             </div>
@@ -373,15 +373,18 @@ const Dashboard = () => {
         </Card>
 
         {/* CTA */}
-        <div className="text-center mt-12 animate-slide-up" style={{ animationDelay: '0.4s' }}>
+        <div className="text-center mt-16 animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <Button
             size="lg"
-            className="bg-gradient-primary shadow-glow text-lg px-12 hover:scale-105 transition-transform duration-300"
+            className="bg-gradient-primary shadow-glow text-xl px-16 hover:scale-110 transition-all duration-300 font-bold"
             onClick={() => navigate('/courses')}
           >
-            {isAr ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}
-            <ArrowRight className="ml-2 w-5 h-5" />
+            {isAr ? '🚀 ابدأ رحلتك الآن' : '🚀 Start Your Journey Now'}
+            <ArrowRight className="ml-2 w-6 h-6" />
           </Button>
+          <p className="text-muted-foreground mt-4 text-sm">
+            {isAr ? 'انضم إلى آلاف المتعلمين واكتشف مسارك المهني' : 'Join thousands of learners and discover your career path'}
+          </p>
         </div>
       </div>
     </div>

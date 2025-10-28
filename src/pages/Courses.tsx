@@ -8,6 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TRACKS } from "@/data/tracks";
 import { TRAINING_CENTERS } from "@/data/trainingCenters";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { BookOpen, Clock, CheckCircle2, Star, ExternalLink, GraduationCap, TrendingUp } from "lucide-react";
 
@@ -19,30 +21,132 @@ interface Results {
 const NewCourses = () => {
   const navigate = useNavigate();
   const { t, language } = useLanguage();
+  const { user } = useAuth();
   const [results, setResults] = useState<Results | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem("eduMentorResults");
-    if (saved) {
-      setResults(JSON.parse(saved));
+    const fetchResults = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // Get assessment results from database
+        const { data: assessmentData, error: assessmentError } = await supabase
+          .from('assessment_results')
+          .select('track_id')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (assessmentError) throw assessmentError;
+
+        if (!assessmentData) {
+          setLoading(false);
+          return;
+        }
+
+        // Get completed courses from course_progress
+        const { data: progressData, error: progressError } = await supabase
+          .from('course_progress')
+          .select('course_id')
+          .eq('user_id', user.id)
+          .eq('completed', true);
+
+        if (progressError) throw progressError;
+
+        const completedCourses = progressData?.map(p => p.course_id) || [];
+
+        setResults({
+          primaryTrack: assessmentData.track_id,
+          completedCourses
+        });
+      } catch (error) {
+        console.error('Error fetching results:', error);
+        toast.error(language === "ar" ? "خطأ في تحميل النتائج" : "Error loading results");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, [user, language]);
+
+  const handleToggleCourse = async (courseId: string) => {
+    if (!results || !user) return;
+
+    const isCompleted = results.completedCourses.includes(courseId);
+    const newCompletedStatus = !isCompleted;
+
+    try {
+      // Check if course progress exists
+      const { data: existingProgress } = await supabase
+        .from('course_progress')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('course_id', courseId)
+        .maybeSingle();
+
+      if (existingProgress) {
+        // Update existing progress
+        const { error } = await supabase
+          .from('course_progress')
+          .update({ 
+            completed: newCompletedStatus,
+            completed_at: newCompletedStatus ? new Date().toISOString() : null,
+            progress: newCompletedStatus ? 100 : 0
+          })
+          .eq('id', existingProgress.id);
+
+        if (error) throw error;
+      } else {
+        // Create new progress record
+        const { error } = await supabase
+          .from('course_progress')
+          .insert({
+            user_id: user.id,
+            course_id: courseId,
+            completed: newCompletedStatus,
+            completed_at: newCompletedStatus ? new Date().toISOString() : null,
+            progress: newCompletedStatus ? 100 : 0
+          });
+
+        if (error) throw error;
+      }
+
+      // Update local state
+      const updated = { ...results };
+      if (newCompletedStatus) {
+        updated.completedCourses.push(courseId);
+        toast.success(language === "ar" ? "دورة مكتملة! استمر في العمل الرائع! 🎉" : "Course completed! Keep up the great work! 🎉");
+      } else {
+        updated.completedCourses = updated.completedCourses.filter((id) => id !== courseId);
+        toast.info(language === "ar" ? "تم وضع علامة على الدورة كغير مكتملة" : "Course marked as incomplete");
+      }
+      setResults(updated);
+    } catch (error) {
+      console.error('Error updating course:', error);
+      toast.error(language === "ar" ? "خطأ في تحديث الدورة" : "Error updating course");
     }
-  }, []);
-
-  const handleToggleCourse = (courseId: string) => {
-    if (!results) return;
-
-    const updated = { ...results };
-    if (updated.completedCourses.includes(courseId)) {
-      updated.completedCourses = updated.completedCourses.filter((id) => id !== courseId);
-      toast.info(language === "ar" ? "تم وضع علامة على الدورة كغير مكتملة" : "Course marked as incomplete");
-    } else {
-      updated.completedCourses.push(courseId);
-      toast.success(language === "ar" ? "دورة مكتملة! استمر في العمل الرائع! 🎉" : "Course completed! Keep up the great work! 🎉");
-    }
-
-    setResults(updated);
-    localStorage.setItem("eduMentorResults", JSON.stringify(updated));
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center">
+        <Card className="p-12 text-center glass max-w-md">
+          <div className="animate-pulse">
+            <div className="text-4xl mb-4">⏳</div>
+            <p className="text-muted-foreground">
+              {language === "ar" ? "جاري التحميل..." : "Loading..."}
+            </p>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   if (!results) {
     return (

@@ -111,11 +111,14 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center">
-        <Card className="p-12 text-center glass max-w-md">
-          <p className="text-muted-foreground">
-            {isAr ? 'جاري تحميل لوحة المعلومات...' : 'Loading your dashboard...'}
-          </p>
+      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center px-4">
+        <Card className="p-12 text-center glass max-w-md border-primary/20">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-muted-foreground text-lg">
+              {isAr ? 'جاري تحميل لوحة المعلومات...' : 'Loading your dashboard...'}
+            </p>
+          </div>
         </Card>
       </div>
     );
@@ -123,18 +126,22 @@ const Dashboard = () => {
 
   if (!assessmentData) {
     return (
-      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center">
-        <Card className="p-12 text-center glass max-w-md">
-          <h2 className="text-2xl font-bold mb-4">
+      <div className="min-h-screen pt-24 pb-12 flex items-center justify-center px-4">
+        <Card className="p-12 text-center glass max-w-md border-primary/20">
+          <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow">
+            <Target className="w-8 h-8 text-primary-foreground" />
+          </div>
+          <h2 className="text-2xl font-bold mb-4 gradient-text">
             {isAr ? 'لا توجد نتائج تقييم' : 'No Assessment Results'}
           </h2>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-muted-foreground mb-6 text-lg">
             {isAr 
               ? 'قم بإجراء التقييم أولاً لرؤية لوحة المعلومات الخاصة بك'
               : 'Take the assessment first to see your personalized dashboard'}
           </p>
           <Button
-            onClick={() => navigate("/assessment")}
+            size="lg"
+            onClick={() => navigate("/assessment/start")}
             className="bg-gradient-primary shadow-glow"
           >
             {isAr ? 'ابدأ التقييم' : 'Start Assessment'}
@@ -158,55 +165,55 @@ const Dashboard = () => {
   const topTrack = sortedTracks[0];
 
   return (
-    <div className="min-h-screen py-20 px-4">
+    <div className="min-h-screen py-20 px-4 bg-gradient-to-b from-background to-background/80">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12 animate-fade-in">
-          <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
-            <Sparkles className="w-4 h-4 text-primary animate-pulse" />
-            <span className="text-sm font-medium gradient-text">
+          <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-6 py-3 rounded-full mb-6 border border-primary/20 shadow-glow">
+            <Sparkles className="w-5 h-5 text-primary animate-pulse" />
+            <span className="text-base font-semibold gradient-text">
               {isAr ? 'لوحة المعلومات الخاصة بك' : 'Your Dashboard'}
             </span>
           </div>
 
-          <h1 className="text-4xl font-bold mb-4 gradient-text">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 gradient-text">
             {isAr ? 'نتائج تقييمك الشخصي' : 'Your Personalized Results'}
           </h1>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
             {isAr 
               ? 'تم تحليل إجاباتك بدقة باستخدام نموذج RIASEC العلمي'
               : 'Your answers were analyzed using the scientific RIASEC model'}
           </p>
 
-          <div className="flex items-center justify-center gap-2 mt-6">
-            <Award className="w-5 h-5 text-primary" />
-            <span className="text-sm font-medium">
+          <div className="flex items-center justify-center gap-3 mt-8 bg-card/50 backdrop-blur-sm px-6 py-3 rounded-full border border-primary/20 w-fit mx-auto">
+            <Award className="w-6 h-6 text-primary" />
+            <span className="text-base font-medium">
               {isAr ? 'دقة التقييم:' : 'Confidence Score:'}{' '}
-              <span className="text-primary font-bold">{Math.round(confidence * 100)}%</span>
+              <span className="text-primary font-bold text-lg">{Math.round(confidence * 100)}%</span>
             </span>
           </div>
         </div>
 
         {/* Top Recommendation */}
-        <Card className="mb-8 overflow-hidden border-primary/30 shadow-glow animate-slide-up">
-          <div className="h-2 bg-gradient-primary" />
-          <CardContent className="p-8">
-            <div className="flex items-start gap-6">
-              <div className="text-6xl">{TRACK_INFO[topTrack[0]]?.icon || '🎯'}</div>
-              <div className="flex-1">
-                <Badge className="mb-3 bg-gradient-primary">
+        <Card className="mb-8 overflow-hidden border-primary/30 shadow-glow animate-slide-up bg-gradient-to-br from-card to-card/50">
+          <div className="h-3 bg-gradient-primary" />
+          <CardContent className="p-8 md:p-10">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+              <div className="text-7xl md:text-8xl">{TRACK_INFO[topTrack[0]]?.icon || '🎯'}</div>
+              <div className="flex-1 text-center md:text-start">
+                <Badge className="mb-4 bg-gradient-primary text-base px-4 py-2 shadow-glow">
                   {isAr ? 'المسار الأنسب لك' : 'Best Match For You'}
                 </Badge>
-                <h2 className="text-3xl font-bold mb-2">
+                <h2 className="text-3xl md:text-4xl font-bold mb-3 gradient-text">
                   {isAr ? TRACK_INFO[topTrack[0]]?.ar : TRACK_INFO[topTrack[0]]?.en}
                 </h2>
-                <p className="text-muted-foreground mb-4">
+                <p className="text-muted-foreground mb-6 text-lg">
                   {isAr ? TRACK_INFO[topTrack[0]]?.desc_ar : TRACK_INFO[topTrack[0]]?.desc_en}
                 </p>
-                <Progress value={topTrack[1] * 100} className="h-3 mb-2" />
-                <p className="text-sm text-muted-foreground">
+                <Progress value={topTrack[1] * 100} className="h-4 mb-3" />
+                <p className="text-base text-muted-foreground">
                   {isAr ? 'نسبة التطابق:' : 'Match Score:'}{' '}
-                  <span className="font-bold text-primary">{Math.round(topTrack[1] * 100)}%</span>
+                  <span className="font-bold text-primary text-xl">{Math.round(topTrack[1] * 100)}%</span>
                 </p>
               </div>
             </div>
@@ -216,31 +223,33 @@ const Dashboard = () => {
         {/* Grid layout */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* RIASEC Profile */}
-          <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.1s' }}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="w-5 h-5 text-primary" />
+          <Card className="glass border-primary/20 animate-slide-up hover:border-primary/40 transition-all duration-300" style={{ animationDelay: '0.1s' }}>
+            <CardHeader className="border-b border-border/50">
+              <CardTitle className="flex items-center gap-3 text-2xl">
+                <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow">
+                  <Brain className="w-6 h-6 text-primary-foreground" />
+                </div>
                 {isAr ? 'ملفك الشخصي (RIASEC)' : 'Your Personality Profile (RIASEC)'}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5 pt-6">
               {sortedRiasec.map(([code, score]) => (
                 <div key={code} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-3 h-3 rounded-full ${RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.color}`} />
-                      <span className="font-medium">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-4 h-4 rounded-full ${RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.color} shadow-md`} />
+                      <span className="font-semibold text-base">
                         {isAr ? RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.ar : RIASEC_INFO[code as keyof typeof RIASEC_INFO]?.en}
                       </span>
                     </div>
-                    <span className="text-sm font-bold text-primary">
+                    <span className="text-base font-bold text-primary">
                       {Math.round(score * 100)}%
                     </span>
                   </div>
-                  <Progress value={score * 100} className="h-2" />
+                  <Progress value={score * 100} className="h-3" />
                 </div>
               ))}
-              <p className="text-xs text-muted-foreground mt-4">
+              <p className="text-sm text-muted-foreground mt-6 pt-4 border-t border-border/50">
                 {isAr 
                   ? 'نموذج RIASEC يصنف الشخصيات إلى 6 أنواع لمساعدتك في اختيار المسار المهني المناسب'
                   : 'RIASEC model classifies personalities into 6 types to help you choose the right career path'}
@@ -249,28 +258,30 @@ const Dashboard = () => {
           </Card>
 
           {/* All Tracks */}
-          <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-primary" />
+          <Card className="glass border-primary/20 animate-slide-up hover:border-primary/40 transition-all duration-300" style={{ animationDelay: '0.2s' }}>
+            <CardHeader className="border-b border-border/50">
+              <CardTitle className="flex items-center gap-3 text-2xl">
+                <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow">
+                  <Target className="w-6 h-6 text-primary-foreground" />
+                </div>
                 {isAr ? 'جميع المسارات المقترحة' : 'All Recommended Tracks'}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-5 pt-6">
               {sortedTracks.map(([trackId, score]) => (
                 <div key={trackId} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">{TRACK_INFO[trackId]?.icon}</span>
-                      <span className="font-medium text-sm">
+                    <div className="flex items-center gap-3">
+                      <span className="text-3xl">{TRACK_INFO[trackId]?.icon}</span>
+                      <span className="font-semibold text-base">
                         {isAr ? TRACK_INFO[trackId]?.ar : TRACK_INFO[trackId]?.en}
                       </span>
                     </div>
-                    <span className="text-sm font-bold text-primary">
+                    <span className="text-base font-bold text-primary">
                       {Math.round(score * 100)}%
                     </span>
                   </div>
-                  <Progress value={score * 100} className="h-2" />
+                  <Progress value={score * 100} className="h-3" />
                 </div>
               ))}
             </CardContent>
@@ -278,23 +289,25 @@ const Dashboard = () => {
         </div>
 
         {/* Next Steps */}
-        <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.3s' }}>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-primary" />
+        <Card className="glass border-primary/20 animate-slide-up hover:border-primary/40 transition-all duration-300" style={{ animationDelay: '0.3s' }}>
+          <CardHeader className="border-b border-border/50">
+            <CardTitle className="flex items-center gap-3 text-2xl">
+              <div className="w-10 h-10 bg-gradient-primary rounded-lg flex items-center justify-center shadow-glow">
+                <TrendingUp className="w-6 h-6 text-primary-foreground" />
+              </div>
               {isAr ? 'الخطوات التالية' : 'Next Steps'}
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto mb-3 shadow-glow">
-                  <span className="text-2xl">📚</span>
+          <CardContent className="pt-8">
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-3xl">📚</span>
                 </div>
-                <h3 className="font-bold mb-2">
+                <h3 className="font-bold text-lg mb-3">
                   {isAr ? 'استكشف الدورات' : 'Explore Courses'}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-3">
+                <p className="text-sm text-muted-foreground mb-4 min-h-[60px]">
                   {isAr 
                     ? 'تصفح الدورات المناسبة لمسارك المهني'
                     : 'Browse courses matching your career path'}
@@ -303,21 +316,21 @@ const Dashboard = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => navigate('/courses')}
-                  className="gap-2"
+                  className="gap-2 w-full"
                 >
                   {isAr ? 'الدورات' : 'Courses'}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
 
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto mb-3 shadow-glow">
-                  <span className="text-2xl">🏆</span>
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-3xl">🏆</span>
                 </div>
-                <h3 className="font-bold mb-2">
+                <h3 className="font-bold text-lg mb-3">
                   {isAr ? 'لوحة الصدارة' : 'Leaderboard'}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-3">
+                <p className="text-sm text-muted-foreground mb-4 min-h-[60px]">
                   {isAr 
                     ? 'قارن نتائجك مع المتعلمين الآخرين'
                     : 'Compare your results with other learners'}
@@ -326,21 +339,21 @@ const Dashboard = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => navigate('/leaderboard')}
-                  className="gap-2"
+                  className="gap-2 w-full"
                 >
                   {isAr ? 'الصدارة' : 'Leaderboard'}
                   <ArrowRight className="w-4 h-4" />
                 </Button>
               </div>
 
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-primary rounded-xl flex items-center justify-center mx-auto mb-3 shadow-glow">
-                  <span className="text-2xl">🔄</span>
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-gradient-primary rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-glow group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-3xl">🔄</span>
                 </div>
-                <h3 className="font-bold mb-2">
+                <h3 className="font-bold text-lg mb-3">
                   {isAr ? 'إعادة التقييم' : 'Retake Assessment'}
                 </h3>
-                <p className="text-sm text-muted-foreground mb-3">
+                <p className="text-sm text-muted-foreground mb-4 min-h-[60px]">
                   {isAr 
                     ? 'احصل على نتائج محدثة'
                     : 'Get updated results'}
@@ -349,7 +362,7 @@ const Dashboard = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => navigate('/assessment/start')}
-                  className="gap-2"
+                  className="gap-2 w-full"
                 >
                   {isAr ? 'إعادة' : 'Retake'}
                   <ArrowRight className="w-4 h-4" />
@@ -363,7 +376,7 @@ const Dashboard = () => {
         <div className="text-center mt-12 animate-slide-up" style={{ animationDelay: '0.4s' }}>
           <Button
             size="lg"
-            className="bg-gradient-primary shadow-glow text-lg px-12"
+            className="bg-gradient-primary shadow-glow text-lg px-12 hover:scale-105 transition-transform duration-300"
             onClick={() => navigate('/courses')}
           >
             {isAr ? 'ابدأ رحلتك الآن' : 'Start Your Journey Now'}

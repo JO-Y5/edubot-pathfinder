@@ -29,6 +29,10 @@ export const EduBot = ({ isOpen, onClose }: EduBotProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log("EduBot isOpen:", isOpen);
+  }, [isOpen]);
+
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }

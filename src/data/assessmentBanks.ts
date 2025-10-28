@@ -1,359 +1,68 @@
 // Professional Assessment Banks based on RIASEC and Big5 personality models
-// Each question has a category that maps to personality traits and career tracks
+// Balanced mix of scale, single-choice, and multi-choice questions
 
 export const BANK_UNI = [
-  // ========== RIASEC: Investigative (تحليلي، بحثي) ==========
-  {
-    id: 'logical_thinking_1',
-    q_ar: 'أستمتع بحل المسائل المعقدة التي تتطلب تفكير منطقي',
-    q_en: 'I enjoy solving complex problems that require logical thinking',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'logical_thinking',
-    tracks: { ai: 1.0, cyber: 0.8, web: 0.6 }
-  },
-  {
-    id: 'academic_strength_1',
-    q_ar: 'أفضل المواد التي تحتوي على تحليل عميق وبحث علمي',
-    q_en: 'I prefer subjects with deep analysis and scientific research',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'academic_strength',
-    tracks: { ai: 0.9, cyber: 0.7 }
-  },
-  {
-    id: 'problem_solving_1',
-    q_ar: 'عندما أواجه مشكلة، أحب أن أفهم السبب الجذري قبل إيجاد الحل',
-    q_en: 'When facing a problem, I like to understand the root cause before finding a solution',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'problem_solving',
-    tracks: { ai: 0.8, cyber: 0.9, web: 0.6 }
-  },
-  {
-    id: 'learning_motivation_1',
-    q_ar: 'أستمتع بتعلم تقنيات وأدوات جديدة بشكل مستمر',
-    q_en: 'I enjoy continuously learning new technologies and tools',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'learning_motivation',
-    tracks: { ai: 0.9, web: 0.8, cyber: 0.7 }
-  },
+  // ========== Scale Questions (10) ==========
+  { id: 'logical_thinking_1', q_ar: 'أستمتع بحل المسائل المعقدة التي تتطلب تفكير منطقي', q_en: 'I enjoy solving complex problems that require logical thinking', type: 'scale', min: 1, max: 5, category: 'logical_thinking', tracks: { ai: 1.0, cyber: 0.8, web: 0.6 } },
+  { id: 'academic_strength_1', q_ar: 'أفضل المواد التي تحتوي على تحليل عميق وبحث علمي', q_en: 'I prefer subjects with deep analysis and scientific research', type: 'scale', min: 1, max: 5, category: 'academic_strength', tracks: { ai: 0.9, cyber: 0.7 } },
+  { id: 'learning_motivation_1', q_ar: 'أستمتع بتعلم تقنيات وأدوات جديدة بشكل مستمر', q_en: 'I enjoy continuously learning new technologies and tools', type: 'scale', min: 1, max: 5, category: 'learning_motivation', tracks: { ai: 0.9, web: 0.8, cyber: 0.7 } },
+  { id: 'tech_interest_1', q_ar: 'أفضل العمل مع الأجهزة والبرمجيات أكثر من الأمور النظرية', q_en: 'I prefer working with devices and software over theoretical matters', type: 'scale', min: 1, max: 5, category: 'tech_interest', tracks: { web: 1.0, cyber: 0.8, ai: 0.6 } },
+  { id: 'interests_1', q_ar: 'أحب التصميم والابتكار في حل المشكلات', q_en: 'I love designing and innovating in problem solving', type: 'scale', min: 1, max: 5, category: 'interests', tracks: { design: 1.0, web: 0.7, ai: 0.5 } },
+  { id: 'hobbies_1', q_ar: 'أهتم بالتفاصيل البصرية وتجربة المستخدم', q_en: 'I care about visual details and user experience', type: 'scale', min: 1, max: 5, category: 'hobbies', tracks: { design: 0.9, web: 0.8 } },
+  { id: 'teamwork_1', q_ar: 'أفضل العمل ضمن فريق على العمل الفردي', q_en: 'I prefer working in a team over individual work', type: 'scale', min: 1, max: 5, category: 'teamwork', tracks: { business: 0.8, design: 0.5, web: 0.4 } },
+  { id: 'leadership_1', q_ar: 'أحب قيادة المشاريع واتخاذ القرارات الاستراتيجية', q_en: 'I like leading projects and making strategic decisions', type: 'scale', min: 1, max: 5, category: 'leadership', tracks: { business: 1.0, ai: 0.4 } },
+  { id: 'planning_1', q_ar: 'أحب التخطيط المسبق وتنظيم المهام بدقة', q_en: 'I like planning ahead and organizing tasks precisely', type: 'scale', min: 1, max: 5, category: 'planning', tracks: { cyber: 0.8, ai: 0.6, business: 0.7 } },
+  { id: 'decision_making_1', q_ar: 'أعتمد على البيانات والأدلة في اتخاذ القرارات', q_en: 'I rely on data and evidence in decision making', type: 'scale', min: 1, max: 5, category: 'decision_making', tracks: { ai: 0.9, cyber: 0.8, business: 0.6 } },
 
-  // ========== RIASEC: Realistic (عملي، تقني) ==========
-  {
-    id: 'tech_interest_1',
-    q_ar: 'أفضل العمل مع الأجهزة والبرمجيات أكثر من الأمور النظرية',
-    q_en: 'I prefer working with devices and software over theoretical matters',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'tech_interest',
-    tracks: { web: 1.0, cyber: 0.8, ai: 0.6 }
-  },
-  {
-    id: 'skills_1',
-    q_ar: 'أستطيع تطبيق ما أتعلمه عملياً بسرعة',
-    q_en: 'I can quickly apply what I learn practically',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'skills',
-    tracks: { web: 0.9, ai: 0.7, cyber: 0.7 }
-  },
-  {
-    id: 'hands_on',
-    q_ar: 'أفضل المشاريع العملية على القراءة والكتابة',
-    q_en: 'I prefer practical projects over reading and writing',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'skills',
-    tracks: { web: 0.8, design: 0.7 }
-  },
+  // ========== Single Choice Questions (10) ==========
+  { id: 'preferred_work', q_ar: 'ما نوع العمل الذي تفضله؟', q_en: 'What type of work do you prefer?', type: 'single', options_ar: ['تطوير الأنظمة والبرمجة', 'تحليل البيانات والذكاء الاصطناعي', 'التصميم والإبداع', 'الأمن السيبراني', 'إدارة الأعمال والتسويق'], options_en: ['Systems Development & Programming', 'Data Analysis & AI', 'Design & Creativity', 'Cybersecurity', 'Business Management & Marketing'], category: 'interests', tracks: { web: 0, ai: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 5 }, 1: { ai: 5 }, 2: { design: 5 }, 3: { cyber: 5 }, 4: { business: 5 } } },
+  { id: 'career_goals', q_ar: 'ما هدفك المهني الأساسي؟', q_en: 'What is your primary career goal?', type: 'single', options_ar: ['أن أصبح خبير تقني متخصص', 'بناء منتجات وشركات ناشئة', 'العمل في مجال الأمن والحماية', 'تصميم تجارب مستخدم مميزة', 'قيادة فرق وإدارة مشاريع'], options_en: ['Become a specialized technical expert', 'Build products and startups', 'Work in security and protection', 'Design exceptional user experiences', 'Lead teams and manage projects'], category: 'career_values', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 5 }, 1: { web: 4, business: 3 }, 2: { cyber: 5 }, 3: { design: 5 }, 4: { business: 5 } } },
+  { id: 'work_environment', q_ar: 'ما بيئة العمل المفضلة لديك؟', q_en: 'What is your preferred work environment?', type: 'single', options_ar: ['مختبر بحثي أو شركة تقنية كبيرة', 'شركة ناشئة سريعة النمو', 'فريلانس أو عمل حر', 'مؤسسة كبيرة منظمة', 'استوديو تصميم إبداعي'], options_en: ['Research lab or big tech company', 'Fast-growing startup', 'Freelance or independent work', 'Large organized corporation', 'Creative design studio'], category: 'career_values', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 4, business: 3 }, 2: { web: 3, design: 3 }, 3: { cyber: 4, business: 3 }, 4: { design: 5 } } },
+  { id: 'learning_preference', q_ar: 'كيف تفضل تعلم مهارات جديدة؟', q_en: 'How do you prefer learning new skills?', type: 'single', options_ar: ['قراءة الوثائق التقنية والأبحاث', 'مشاهدة فيديوهات تعليمية', 'التطبيق العملي المباشر', 'دورات منظمة خطوة بخطوة', 'التجربة والخطأ'], options_en: ['Reading technical documentation and research', 'Watching video tutorials', 'Direct hands-on practice', 'Structured step-by-step courses', 'Trial and error'], category: 'learning_style', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 3, design: 2 }, 2: { web: 4, cyber: 3 }, 3: { cyber: 3, business: 2 }, 4: { design: 3, web: 2 } } },
+  { id: 'problem_approach', q_ar: 'عند مواجهة مشكلة معقدة، ما أول شيء تفعله؟', q_en: 'When facing a complex problem, what do you do first?', type: 'single', options_ar: ['أحللها إلى أجزاء صغيرة', 'أبحث عن حلول مشابهة', 'أرسم مخطط أو تصميم', 'أستشير الخبراء', 'أجرب حلول مختلفة بسرعة'], options_en: ['Break it into smaller parts', 'Search for similar solutions', 'Draw a diagram or design', 'Consult experts', 'Try different solutions quickly'], category: 'problem_solving', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 4, cyber: 3 }, 1: { web: 4 }, 2: { design: 4, ai: 2 }, 3: { business: 3 }, 4: { web: 3, design: 2 } } },
+  { id: 'coding_approach', q_ar: 'عند كتابة كود برمجي، ما الذي يهمك أكثر؟', q_en: 'When writing code, what matters most to you?', type: 'single', options_ar: ['الأداء والكفاءة', 'سهولة القراءة والصيانة', 'الابتكار والحلول الإبداعية', 'الأمان والحماية', 'سرعة التطوير'], options_en: ['Performance & efficiency', 'Readability & maintainability', 'Innovation & creative solutions', 'Security & protection', 'Development speed'], category: 'skills', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 4 }, 2: { design: 3, ai: 2 }, 3: { cyber: 5 }, 4: { web: 3, business: 2 } } },
+  { id: 'motivation', q_ar: 'ما الذي يحفزك أكثر في العمل؟', q_en: 'What motivates you most at work?', type: 'single', options_ar: ['حل تحديات تقنية صعبة', 'بناء منتجات يستخدمها الناس', 'التعلم المستمر', 'التأثير الإيجابي على الآخرين', 'النجاح المالي'], options_en: ['Solving difficult technical challenges', 'Building products people use', 'Continuous learning', 'Positive impact on others', 'Financial success'], category: 'career_values', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 4, cyber: 3 }, 1: { web: 4, design: 3 }, 2: { ai: 3 }, 3: { design: 3, business: 2 }, 4: { business: 5 } } },
+  { id: 'project_type', q_ar: 'ما نوع المشاريع التي تستمتع بها أكثر؟', q_en: 'What type of projects do you enjoy most?', type: 'single', options_ar: ['مشاريع بحثية ومعقدة', 'مشاريع عملية تطبيقية', 'مشاريع إبداعية فنية', 'مشاريع أمنية حساسة', 'مشاريع تجارية ربحية'], options_en: ['Research & complex projects', 'Practical application projects', 'Creative artistic projects', 'Sensitive security projects', 'Commercial profitable projects'], category: 'interests', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 5 }, 1: { web: 4 }, 2: { design: 5 }, 3: { cyber: 5 }, 4: { business: 5 } } },
+  { id: 'communication_style', q_ar: 'كيف تفضل التواصل مع فريقك؟', q_en: 'How do you prefer communicating with your team?', type: 'single', options_ar: ['مستندات تقنية مفصلة', 'اجتماعات وجهاً لوجه', 'رسائل سريعة ومباشرة', 'عروض تقديمية مرئية', 'لا أحب التواصل الكثير'], options_en: ['Detailed technical documents', 'Face-to-face meetings', 'Quick direct messages', 'Visual presentations', 'Prefer minimal communication'], category: 'presentation', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 3, cyber: 2 }, 1: { business: 4 }, 2: { web: 3 }, 3: { design: 4, business: 3 }, 4: { ai: 2, cyber: 2 } } },
+  { id: 'time_management', q_ar: 'كيف تنظم وقتك عند العمل على مشروع؟', q_en: 'How do you organize your time when working on a project?', type: 'single', options_ar: ['خطة مفصلة منذ البداية', 'أخطط أسبوعياً', 'أتعامل مع المهام حسب الأولوية', 'أعمل بشكل مرن حسب الإلهام', 'أفضل العمل تحت الضغط'], options_en: ['Detailed plan from the start', 'Plan weekly', 'Handle tasks by priority', 'Work flexibly based on inspiration', 'Prefer working under pressure'], category: 'planning', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { cyber: 4, business: 3 }, 1: { business: 3, web: 2 }, 2: { ai: 3, web: 3 }, 3: { design: 4 }, 4: { web: 2, business: 2 } } },
 
-  // ========== RIASEC: Artistic (فني، إبداعي) ==========
-  {
-    id: 'interests_1',
-    q_ar: 'أحب التصميم والابتكار في حل المشكلات',
-    q_en: 'I love designing and innovating in problem solving',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'interests',
-    tracks: { design: 1.0, web: 0.7, ai: 0.5 }
-  },
-  {
-    id: 'hobbies_1',
-    q_ar: 'أهتم بالتفاصيل البصرية وتجربة المستخدم',
-    q_en: 'I care about visual details and user experience',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'hobbies',
-    tracks: { design: 0.9, web: 0.8 }
-  },
-  {
-    id: 'creativity',
-    q_ar: 'أستمتع بإيجاد حلول إبداعية غير تقليدية',
-    q_en: 'I enjoy finding creative unconventional solutions',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'interests',
-    tracks: { design: 0.8, ai: 0.6, business: 0.5 }
-  },
-
-  // ========== RIASEC: Social (اجتماعي، خدمي) ==========
-  {
-    id: 'teamwork_1',
-    q_ar: 'أفضل العمل ضمن فريق على العمل الفردي',
-    q_en: 'I prefer working in a team over individual work',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'teamwork',
-    tracks: { business: 0.8, design: 0.5, web: 0.4 }
-  },
-  {
-    id: 'presentation_1',
-    q_ar: 'أجيد شرح الأفكار المعقدة بطريقة بسيطة للآخرين',
-    q_en: 'I can explain complex ideas simply to others',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'presentation',
-    tracks: { business: 0.9, design: 0.5 }
-  },
-  {
-    id: 'communication',
-    q_ar: 'أستمتع بالنقاش وتبادل الأفكار مع الزملاء',
-    q_en: 'I enjoy discussing and exchanging ideas with colleagues',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'teamwork',
-    tracks: { business: 0.7, web: 0.4 }
-  },
-
-  // ========== RIASEC: Enterprising (قيادي، ريادي) ==========
-  {
-    id: 'leadership_1',
-    q_ar: 'أحب قيادة المشاريع واتخاذ القرارات الاستراتيجية',
-    q_en: 'I like leading projects and making strategic decisions',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'leadership',
-    tracks: { business: 1.0, ai: 0.4 }
-  },
-  {
-    id: 'entrepreneurship_1',
-    q_ar: 'أفكر في بناء مشروعي الخاص مستقبلاً',
-    q_en: 'I think about building my own project in the future',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'entrepreneurship',
-    tracks: { business: 0.9, web: 0.5, design: 0.5 }
-  },
-  {
-    id: 'career_values_1',
-    q_ar: 'أهتم بتطوير مهارات إدارة الأعمال والتسويق',
-    q_en: 'I care about developing business management and marketing skills',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'career_values',
-    tracks: { business: 1.0, design: 0.3 }
-  },
-
-  // ========== RIASEC: Conventional (منظم، إداري) ==========
-  {
-    id: 'planning_1',
-    q_ar: 'أحب التخطيط المسبق وتنظيم المهام بدقة',
-    q_en: 'I like planning ahead and organizing tasks precisely',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'planning',
-    tracks: { cyber: 0.8, ai: 0.6, business: 0.7 }
-  },
-  {
-    id: 'learning_style_1',
-    q_ar: 'أفضل اتباع منهجية واضحة عند التعلم',
-    q_en: 'I prefer following a clear methodology when learning',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'learning_style',
-    tracks: { cyber: 0.7, ai: 0.6 }
-  },
-  {
-    id: 'decision_making_1',
-    q_ar: 'أعتمد على البيانات والأدلة في اتخاذ القرارات',
-    q_en: 'I rely on data and evidence in decision making',
-    type: 'scale',
-    min: 1,
-    max: 5,
-    category: 'decision_making',
-    tracks: { ai: 0.9, cyber: 0.8, business: 0.6 }
-  },
-
-  // ========== Multiple Choice Questions ==========
-  {
-    id: 'preferred_work',
-    q_ar: 'ما نوع العمل الذي تفضله؟',
-    q_en: 'What type of work do you prefer?',
-    type: 'single',
-    options_ar: ['تطوير الأنظمة والبرمجة', 'تحليل البيانات والذكاء الاصطناعي', 'التصميم والإبداع', 'الأمن السيبراني', 'إدارة الأعمال والتسويق'],
-    options_en: ['Systems Development & Programming', 'Data Analysis & AI', 'Design & Creativity', 'Cybersecurity', 'Business Management & Marketing'],
-    category: 'interests',
-    tracks: { web: 0.0, ai: 0.0, design: 0.0, cyber: 0.0, business: 0.0 },
-    track_mapping: {
-      0: { web: 5 },
-      1: { ai: 5 },
-      2: { design: 5 },
-      3: { cyber: 5 },
-      4: { business: 5 }
-    }
-  },
-  {
-    id: 'tech_topics',
-    q_ar: 'ما المواضيع التقنية التي تثير اهتمامك؟ (اختر كل ما ينطبق)',
-    q_en: 'Which tech topics interest you? (Select all that apply)',
-    type: 'multi',
-    options_ar: ['تعلم الآلة والذكاء الاصطناعي', 'تطوير المواقع والتطبيقات', 'الأمن السيبراني والحماية', 'تصميم واجهات المستخدم', 'تحليل البيانات', 'ريادة الأعمال التقنية'],
-    options_en: ['Machine Learning & AI', 'Web & App Development', 'Cybersecurity & Protection', 'UI/UX Design', 'Data Analysis', 'Tech Entrepreneurship'],
-    category: 'tech_interest',
-    tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 },
-    track_mapping: {
-      0: { ai: 3 },
-      1: { web: 3 },
-      2: { cyber: 3 },
-      3: { design: 3 },
-      4: { ai: 2 },
-      5: { business: 3 }
-    }
-  },
-  {
-    id: 'strength_areas',
-    q_ar: 'ما المجالات التي تشعر بالقوة فيها؟ (اختر كل ما ينطبق)',
-    q_en: 'Which areas do you feel strong in? (Select all that apply)',
-    type: 'multi',
-    options_ar: ['الرياضيات والإحصاء', 'البرمجة والخوارزميات', 'التصميم الجرافيكي', 'حل المشكلات التقنية', 'التواصل والعرض', 'التخطيط والتنظيم'],
-    options_en: ['Mathematics & Statistics', 'Programming & Algorithms', 'Graphic Design', 'Technical Problem Solving', 'Communication & Presentation', 'Planning & Organization'],
-    category: 'skills',
-    tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 },
-    track_mapping: {
-      0: { ai: 3 },
-      1: { web: 3, ai: 2 },
-      2: { design: 3 },
-      3: { cyber: 3, web: 2 },
-      4: { business: 3 },
-      5: { business: 2, cyber: 2 }
-    }
-  },
-  {
-    id: 'career_goals',
-    q_ar: 'ما هدفك المهني الأساسي؟',
-    q_en: 'What is your primary career goal?',
-    type: 'single',
-    options_ar: ['أن أصبح خبير تقني متخصص', 'بناء منتجات وشركات ناشئة', 'العمل في مجال الأمن والحماية', 'تصميم تجارب مستخدم مميزة', 'قيادة فرق وإدارة مشاريع'],
-    options_en: ['Become a specialized technical expert', 'Build products and startups', 'Work in security and protection', 'Design exceptional user experiences', 'Lead teams and manage projects'],
-    category: 'career_values',
-    tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 },
-    track_mapping: {
-      0: { ai: 5 },
-      1: { web: 4, business: 3 },
-      2: { cyber: 5 },
-      3: { design: 5 },
-      4: { business: 5 }
-    }
-  },
-  {
-    id: 'work_environment',
-    q_ar: 'ما بيئة العمل المفضلة لديك؟',
-    q_en: 'What is your preferred work environment?',
-    type: 'single',
-    options_ar: ['مختبر بحثي أو شركة تقنية كبيرة', 'شركة ناشئة سريعة النمو', 'فريلانس أو عمل حر', 'مؤسسة كبيرة منظمة', 'استوديو تصميم إبداعي'],
-    options_en: ['Research lab or big tech company', 'Fast-growing startup', 'Freelance or independent work', 'Large organized corporation', 'Creative design studio'],
-    category: 'career_values',
-    tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 },
-    track_mapping: {
-      0: { ai: 4 },
-      1: { web: 4, business: 3 },
-      2: { web: 3, design: 3 },
-      3: { cyber: 4, business: 3 },
-      4: { design: 5 }
-    }
-  },
-  {
-    id: 'learning_preference',
-    q_ar: 'كيف تفضل تعلم مهارات جديدة؟',
-    q_en: 'How do you prefer learning new skills?',
-    type: 'single',
-    options_ar: ['قراءة الوثائق التقنية والأبحاث', 'مشاهدة فيديوهات تعليمية', 'التطبيق العملي المباشر', 'دورات منظمة خطوة بخطوة', 'التجربة والخطأ'],
-    options_en: ['Reading technical documentation and research', 'Watching video tutorials', 'Direct hands-on practice', 'Structured step-by-step courses', 'Trial and error'],
-    category: 'learning_style',
-    tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 },
-    track_mapping: {
-      0: { ai: 4 },
-      1: { web: 3, design: 2 },
-      2: { web: 4, cyber: 3 },
-      3: { cyber: 3, business: 2 },
-      4: { design: 3, web: 2 }
-    }
-  },
-  {
-    id: 'problem_approach',
-    q_ar: 'عند مواجهة مشكلة معقدة، ما أول شيء تفعله؟',
-    q_en: 'When facing a complex problem, what do you do first?',
-    type: 'single',
-    options_ar: ['أحللها إلى أجزاء صغيرة', 'أبحث عن حلول مشابهة', 'أرسم مخطط أو تصميم', 'أستشير الخبراء', 'أجرب حلول مختلفة بسرعة'],
-    options_en: ['Break it into smaller parts', 'Search for similar solutions', 'Draw a diagram or design', 'Consult experts', 'Try different solutions quickly'],
-    category: 'problem_solving',
-    tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 },
-    track_mapping: {
-      0: { ai: 4, cyber: 3 },
-      1: { web: 4 },
-      2: { design: 4, ai: 2 },
-      3: { business: 3 },
-      4: { web: 3, design: 2 }
-    }
-  }
+  // ========== Multi Choice Questions (5) ==========
+  { id: 'tech_topics', q_ar: 'ما المواضيع التقنية التي تثير اهتمامك؟ (اختر كل ما ينطبق)', q_en: 'Which tech topics interest you? (Select all that apply)', type: 'multi', options_ar: ['تعلم الآلة والذكاء الاصطناعي', 'تطوير المواقع والتطبيقات', 'الأمن السيبراني والحماية', 'تصميم واجهات المستخدم', 'تحليل البيانات', 'ريادة الأعمال التقنية'], options_en: ['Machine Learning & AI', 'Web & App Development', 'Cybersecurity & Protection', 'UI/UX Design', 'Data Analysis', 'Tech Entrepreneurship'], category: 'tech_interest', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 3 }, 1: { web: 3 }, 2: { cyber: 3 }, 3: { design: 3 }, 4: { ai: 2 }, 5: { business: 3 } } },
+  { id: 'strength_areas', q_ar: 'ما المجالات التي تشعر بالقوة فيها؟ (اختر كل ما ينطبق)', q_en: 'Which areas do you feel strong in? (Select all that apply)', type: 'multi', options_ar: ['الرياضيات والإحصاء', 'البرمجة والخوارزميات', 'التصميم الجرافيكي', 'حل المشكلات التقنية', 'التواصل والعرض', 'التخطيط والتنظيم'], options_en: ['Mathematics & Statistics', 'Programming & Algorithms', 'Graphic Design', 'Technical Problem Solving', 'Communication & Presentation', 'Planning & Organization'], category: 'skills', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 3 }, 1: { web: 3, ai: 2 }, 2: { design: 3 }, 3: { cyber: 3, web: 2 }, 4: { business: 3 }, 5: { business: 2, cyber: 2 } } },
+  { id: 'tools_familiar', q_ar: 'ما الأدوات التي لديك خبرة بها أو تريد تعلمها؟ (اختر كل ما ينطبق)', q_en: 'Which tools do you have experience with or want to learn? (Select all that apply)', type: 'multi', options_ar: ['Python/TensorFlow', 'JavaScript/React', 'Figma/Adobe XD', 'Linux/Networking', 'SQL/Database', 'Excel/Analytics'], options_en: ['Python/TensorFlow', 'JavaScript/React', 'Figma/Adobe XD', 'Linux/Networking', 'SQL/Database', 'Excel/Analytics'], category: 'tech_interest', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 3 }, 1: { web: 3 }, 2: { design: 3 }, 3: { cyber: 3 }, 4: { ai: 2, web: 1 }, 5: { business: 3 } } },
+  { id: 'interests_hobbies', q_ar: 'ما الأنشطة التي تستمتع بها؟ (اختر كل ما ينطبق)', q_en: 'What activities do you enjoy? (Select all that apply)', type: 'multi', options_ar: ['قراءة مقالات تقنية', 'بناء مشاريع جانبية', 'التصميم والرسم', 'حل CTF والتحديات الأمنية', 'حضور فعاليات ومؤتمرات', 'كتابة محتوى تقني'], options_en: ['Reading tech articles', 'Building side projects', 'Design & drawing', 'Solving CTF & security challenges', 'Attending events & conferences', 'Writing technical content'], category: 'hobbies', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 2 }, 1: { web: 3 }, 2: { design: 3 }, 3: { cyber: 3 }, 4: { business: 3 }, 5: { ai: 1, web: 1 } } },
+  { id: 'future_skills', q_ar: 'ما المهارات التي تريد تطويرها؟ (اختر كل ما ينطبق)', q_en: 'Which skills do you want to develop? (Select all that apply)', type: 'multi', options_ar: ['Deep Learning', 'Full Stack Development', 'UI/UX Design', 'Penetration Testing', 'Product Management', 'Data Science'], options_en: ['Deep Learning', 'Full Stack Development', 'UI/UX Design', 'Penetration Testing', 'Product Management', 'Data Science'], category: 'learning_motivation', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 3 }, 1: { web: 3 }, 2: { design: 3 }, 3: { cyber: 3 }, 4: { business: 3 }, 5: { ai: 3 } } }
 ];
 
 export const BANK_HS = [
-  // Same 25 questions as BANK_UNI but simplified for high school students
+  // ========== Scale Questions (10) ==========
   { id: 'logical_thinking_1', q_ar: 'أستمتع بحل الألغاز والمسائل المعقدة', q_en: 'I enjoy solving puzzles and complex problems', type: 'scale', min: 1, max: 5, category: 'logical_thinking', tracks: { ai: 1.0, cyber: 0.8, web: 0.6 } },
   { id: 'academic_strength_1', q_ar: 'أحب المواد التي تحتاج تفكير عميق', q_en: 'I like subjects that need deep thinking', type: 'scale', min: 1, max: 5, category: 'academic_strength', tracks: { ai: 0.9, cyber: 0.7 } },
-  { id: 'problem_solving_1', q_ar: 'أحب أن أفهم كيف تعمل الأشياء', q_en: 'I like to understand how things work', type: 'scale', min: 1, max: 5, category: 'problem_solving', tracks: { ai: 0.8, cyber: 0.9, web: 0.6 } },
   { id: 'learning_motivation_1', q_ar: 'أحب تعلم أشياء جديدة عن التكنولوجيا', q_en: 'I love learning new things about technology', type: 'scale', min: 1, max: 5, category: 'learning_motivation', tracks: { ai: 0.9, web: 0.8, cyber: 0.7 } },
   { id: 'tech_interest_1', q_ar: 'أفضل العمل على الكمبيوتر والبرامج', q_en: 'I prefer working with computers and software', type: 'scale', min: 1, max: 5, category: 'tech_interest', tracks: { web: 1.0, cyber: 0.8, ai: 0.6 } },
-  { id: 'skills_1', q_ar: 'أستطيع تطبيق ما أتعلمه بسرعة', q_en: 'I can apply what I learn quickly', type: 'scale', min: 1, max: 5, category: 'skills', tracks: { web: 0.9, ai: 0.7, cyber: 0.7 } },
-  { id: 'hands_on', q_ar: 'أحب المشاريع العملية أكثر من القراءة', q_en: 'I like practical projects more than reading', type: 'scale', min: 1, max: 5, category: 'skills', tracks: { web: 0.8, design: 0.7 } },
   { id: 'interests_1', q_ar: 'أحب التصميم والألوان والفن', q_en: 'I love design, colors and art', type: 'scale', min: 1, max: 5, category: 'interests', tracks: { design: 1.0, web: 0.7, ai: 0.5 } },
   { id: 'hobbies_1', q_ar: 'أهتم بشكل الأشياء وجمالها', q_en: 'I care about how things look and their beauty', type: 'scale', min: 1, max: 5, category: 'hobbies', tracks: { design: 0.9, web: 0.8 } },
-  { id: 'creativity', q_ar: 'أحب إيجاد حلول مختلفة للمشاكل', q_en: 'I like finding different solutions to problems', type: 'scale', min: 1, max: 5, category: 'interests', tracks: { design: 0.8, ai: 0.6, business: 0.5 } },
   { id: 'teamwork_1', q_ar: 'أفضل العمل مع أصدقائي على العمل لوحدي', q_en: 'I prefer working with friends over working alone', type: 'scale', min: 1, max: 5, category: 'teamwork', tracks: { business: 0.8, design: 0.5, web: 0.4 } },
-  { id: 'presentation_1', q_ar: 'أجيد شرح الأفكار للآخرين', q_en: 'I can explain ideas to others well', type: 'scale', min: 1, max: 5, category: 'presentation', tracks: { business: 0.9, design: 0.5 } },
-  { id: 'communication', q_ar: 'أستمتع بالنقاش مع زملائي', q_en: 'I enjoy discussing with my classmates', type: 'scale', min: 1, max: 5, category: 'teamwork', tracks: { business: 0.7, web: 0.4 } },
   { id: 'leadership_1', q_ar: 'أحب قيادة المجموعات في المشاريع', q_en: 'I like leading groups in projects', type: 'scale', min: 1, max: 5, category: 'leadership', tracks: { business: 1.0, ai: 0.4 } },
-  { id: 'entrepreneurship_1', q_ar: 'أفكر في عمل مشروعي الخاص مستقبلاً', q_en: 'I think about starting my own project', type: 'scale', min: 1, max: 5, category: 'entrepreneurship', tracks: { business: 0.9, web: 0.5, design: 0.5 } },
-  { id: 'career_values_1', q_ar: 'أهتم بمهارات البيزنس والتسويق', q_en: 'I care about business and marketing skills', type: 'scale', min: 1, max: 5, category: 'career_values', tracks: { business: 1.0, design: 0.3 } },
   { id: 'planning_1', q_ar: 'أحب التخطيط وتنظيم وقتي', q_en: 'I like planning and organizing my time', type: 'scale', min: 1, max: 5, category: 'planning', tracks: { cyber: 0.8, ai: 0.6, business: 0.7 } },
-  { id: 'learning_style_1', q_ar: 'أفضل طريقة واضحة عند التعلم', q_en: 'I prefer a clear method when learning', type: 'scale', min: 1, max: 5, category: 'learning_style', tracks: { cyber: 0.7, ai: 0.6 } },
   { id: 'decision_making_1', q_ar: 'أعتمد على المعلومات قبل القرار', q_en: 'I rely on information before deciding', type: 'scale', min: 1, max: 5, category: 'decision_making', tracks: { ai: 0.9, cyber: 0.8, business: 0.6 } },
   
+  // ========== Single Choice Questions (10) ==========
+  { id: 'fav_subject', q_ar: 'ما المادة الدراسية المفضلة لديك؟', q_en: 'What is your favorite school subject?', type: 'single', options_ar: ['الرياضيات', 'العلوم (فيزياء، كيمياء، أحياء)', 'اللغات والأدب', 'الفن والتصميم', 'التاريخ والجغرافيا', 'الحاسوب'], options_en: ['Mathematics', 'Sciences (Physics, Chemistry, Biology)', 'Languages & Literature', 'Art & Design', 'History & Geography', 'Computer Science'], category: 'academic_strength', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { ai: 3, cyber: 2 }, 2: { business: 2, design: 1 }, 3: { design: 5 }, 4: { business: 3 }, 5: { web: 4, ai: 3 } } },
   { id: 'preferred_work', q_ar: 'ما المجال الذي يثير اهتمامك؟', q_en: 'Which field interests you?', type: 'single', options_ar: ['البرمجة وتطوير المواقع', 'الذكاء الاصطناعي', 'التصميم والجرافيك', 'الأمن السيبراني', 'إدارة الأعمال'], options_en: ['Programming & Web Dev', 'Artificial Intelligence', 'Design & Graphics', 'Cybersecurity', 'Business Management'], category: 'interests', tracks: { web: 0, ai: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 5 }, 1: { ai: 5 }, 2: { design: 5 }, 3: { cyber: 5 }, 4: { business: 5 } } },
+  { id: 'problem_solving_style', q_ar: 'عندما تواجه مشكلة، كيف تتعامل معها؟', q_en: 'When you face a problem, how do you deal with it?', type: 'single', options_ar: ['أبحث عن الحل على الإنترنت', 'أحاول حلها بنفسي', 'أطلب المساعدة من الآخرين', 'أفكر بطريقة إبداعية', 'أتبع خطوات منظمة'], options_en: ['Search for solution online', 'Try to solve it myself', 'Ask others for help', 'Think creatively', 'Follow organized steps'], category: 'problem_solving', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 3, ai: 2 }, 1: { cyber: 3, web: 3 }, 2: { business: 3 }, 3: { design: 4, ai: 2 }, 4: { cyber: 3, business: 2 } } },
+  { id: 'learning_style', q_ar: 'كيف تتعلم بشكل أفضل؟', q_en: 'How do you learn best?', type: 'single', options_ar: ['بالمشاهدة (فيديوهات)', 'بالقراءة (كتب، مقالات)', 'بالممارسة (تطبيق عملي)', 'بالاستماع (محاضرات)', 'بالتجربة والخطأ'], options_en: ['By watching (videos)', 'By reading (books, articles)', 'By practicing (hands-on)', 'By listening (lectures)', 'By trial and error'], category: 'learning_style', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 3, design: 3 }, 1: { ai: 4, business: 3 }, 2: { web: 4, cyber: 3 }, 3: { business: 3, ai: 2 }, 4: { design: 3, web: 3 } } },
+  { id: 'career_aspiration', q_ar: 'ماذا تتخيل نفسك تعمل بعد التخرج؟', q_en: 'What do you imagine yourself doing after graduation?', type: 'single', options_ar: ['مطور برامج', 'عالم بيانات', 'مصمم جرافيك', 'خبير أمن معلومات', 'رائد أعمال'], options_en: ['Software Developer', 'Data Scientist', 'Graphic Designer', 'Information Security Expert', 'Entrepreneur'], category: 'career_values', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 5 }, 1: { ai: 5 }, 2: { design: 5 }, 3: { cyber: 5 }, 4: { business: 5 } } },
+  { id: 'tech_device', q_ar: 'ماذا تفعل عادة على الكمبيوتر أو الموبايل؟', q_en: 'What do you usually do on computer or mobile?', type: 'single', options_ar: ['ألعب ألعاب', 'أتصفح مواقع التواصل', 'أتعلم برمجة أو تصميم', 'أشاهد فيديوهات تعليمية', 'أقرأ وأبحث'], options_en: ['Play games', 'Browse social media', 'Learn programming or design', 'Watch educational videos', 'Read and research'], category: 'hobbies', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 2 }, 1: { business: 2 }, 2: { web: 4, design: 4 }, 3: { ai: 3 }, 4: { ai: 3 } } },
+  { id: 'future_study', q_ar: 'ما نوع الدراسة الجامعية التي تميل إليها؟', q_en: 'What type of university studies do you lean towards?', type: 'single', options_ar: ['دراسة نظرية وأكاديمية', 'دراسة عملية تطبيقية', 'دراسة فنية إبداعية', 'دراسة تقنية متخصصة', 'دراسة تجارية إدارية'], options_en: ['Theoretical academic study', 'Practical applied study', 'Creative artistic study', 'Specialized technical study', 'Commercial management study'], category: 'interests', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 4 }, 2: { design: 5 }, 3: { cyber: 4 }, 4: { business: 5 } } },
+  { id: 'project_preference', q_ar: 'أي نوع من المشاريع المدرسية تحبه؟', q_en: 'Which type of school projects do you like?', type: 'single', options_ar: ['مشاريع بحثية', 'مشاريع برمجية', 'مشاريع فنية', 'مشاريع جماعية', 'عروض تقديمية'], options_en: ['Research projects', 'Programming projects', 'Artistic projects', 'Group projects', 'Presentations'], category: 'skills', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 5 }, 2: { design: 5 }, 3: { business: 4 }, 4: { business: 4 } } },
+  { id: 'challenge_type', q_ar: 'ما نوع التحديات التي تستمتع بها؟', q_en: 'What type of challenges do you enjoy?', type: 'single', options_ar: ['حل معادلات رياضية', 'بناء شيء جديد', 'تصميم شيء جميل', 'اكتشاف أخطاء وإصلاحها', 'إقناع الآخرين بفكرة'], options_en: ['Solving math equations', 'Building something new', 'Designing something beautiful', 'Finding and fixing bugs', 'Convincing others of an idea'], category: 'problem_solving', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 4 }, 2: { design: 5 }, 3: { cyber: 5 }, 4: { business: 4 } } },
+  { id: 'weekend_activity', q_ar: 'كيف تقضي عطلة نهاية الأسبوع؟', q_en: 'How do you spend your weekend?', type: 'single', options_ar: ['أتعلم شيء جديد', 'أبني مشروع شخصي', 'أمارس هوايات فنية', 'ألعب ألعاب تفكير', 'أقابل أصدقائي'], options_en: ['Learn something new', 'Build a personal project', 'Practice artistic hobbies', 'Play thinking games', 'Meet friends'], category: 'hobbies', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 3 }, 1: { web: 4 }, 2: { design: 4 }, 3: { cyber: 3, ai: 2 }, 4: { business: 3 } } },
+
+  // ========== Multi Choice Questions (5) ==========
   { id: 'tech_topics', q_ar: 'ما يثير اهتمامك؟ (اختر كل ما ينطبق)', q_en: 'What interests you? (Select all)', type: 'multi', options_ar: ['الذكاء الاصطناعي', 'بناء المواقع', 'الأمن والحماية', 'التصميم', 'تحليل البيانات', 'البيزنس'], options_en: ['AI', 'Web Building', 'Security', 'Design', 'Data Analysis', 'Business'], category: 'tech_interest', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 3 }, 1: { web: 3 }, 2: { cyber: 3 }, 3: { design: 3 }, 4: { ai: 2 }, 5: { business: 3 } } },
   { id: 'strength_areas', q_ar: 'ما نقاط قوتك؟ (اختر كل ما ينطبق)', q_en: 'Your strengths? (Select all)', type: 'multi', options_ar: ['الرياضيات', 'البرمجة', 'الرسم', 'حل المشكلات', 'التواصل', 'التنظيم'], options_en: ['Math', 'Programming', 'Drawing', 'Problem Solving', 'Communication', 'Organization'], category: 'skills', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 3 }, 1: { web: 3, ai: 2 }, 2: { design: 3 }, 3: { cyber: 3, web: 2 }, 4: { business: 3 }, 5: { business: 2, cyber: 2 } } },
-  { id: 'career_goals', q_ar: 'ماذا تحب أن تصبح؟', q_en: 'What would you like to become?', type: 'single', options_ar: ['خبير تقني', 'رائد أعمال', 'خبير أمن', 'مصمم', 'مدير فريق'], options_en: ['Tech Expert', 'Entrepreneur', 'Security Expert', 'Designer', 'Team Manager'], category: 'career_values', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 5 }, 1: { web: 4, business: 3 }, 2: { cyber: 5 }, 3: { design: 5 }, 4: { business: 5 } } },
-  { id: 'work_environment', q_ar: 'أين تحب أن تعمل؟', q_en: 'Where would you like to work?', type: 'single', options_ar: ['شركة تقنية كبيرة', 'شركة ناشئة', 'عمل حر', 'مؤسسة منظمة', 'استوديو تصميم'], options_en: ['Big tech company', 'Startup', 'Freelance', 'Organized corp', 'Design studio'], category: 'career_values', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 4, business: 3 }, 2: { web: 3, design: 3 }, 3: { cyber: 4, business: 3 }, 4: { design: 5 } } },
-  { id: 'learning_preference', q_ar: 'كيف تحب التعلم؟', q_en: 'How do you like to learn?', type: 'single', options_ar: ['قراءة', 'فيديوهات', 'تطبيق عملي', 'دورات منظمة', 'تجربة'], options_en: ['Reading', 'Videos', 'Practice', 'Courses', 'Trial'], category: 'learning_style', tracks: { ai: 0, web: 0, cyber: 0, design: 0, business: 0 }, track_mapping: { 0: { ai: 4 }, 1: { web: 3, design: 2 }, 2: { web: 4, cyber: 3 }, 3: { cyber: 3, business: 2 }, 4: { design: 3, web: 2 } } }
+  { id: 'hobby_activities', q_ar: 'ما الأنشطة التي تستمتع بها؟ (اختر كل ما ينطبق)', q_en: 'What activities do you enjoy? (Select all)', type: 'multi', options_ar: ['ألعاب الفيديو', 'الرسم والتصميم', 'القراءة', 'الرياضة', 'البرمجة', 'النشاطات الاجتماعية'], options_en: ['Video games', 'Drawing & design', 'Reading', 'Sports', 'Programming', 'Social activities'], category: 'hobbies', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 3, ai: 2 }, 1: { design: 4 }, 2: { ai: 3, business: 2 }, 3: { business: 2 }, 4: { web: 5, ai: 4 }, 5: { business: 3 } } },
+  { id: 'future_field', q_ar: 'ما المجالات الجامعية التي تفكر فيها؟ (اختر كل ما ينطبق)', q_en: 'Which university fields are you considering? (Select all)', type: 'multi', options_ar: ['الهندسة', 'الطب', 'علوم الحاسوب', 'إدارة الأعمال', 'الإعلام والفنون', 'العلوم'], options_en: ['Engineering', 'Medicine', 'Computer Science', 'Business Admin', 'Media & Arts', 'Sciences'], category: 'interests', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { ai: 3, web: 2 }, 1: { ai: 2 }, 2: { ai: 4, web: 4, cyber: 4 }, 3: { business: 5 }, 4: { design: 5, business: 2 }, 5: { ai: 3 } } },
+  { id: 'learning_methods', q_ar: 'كيف تحب أن تتعلم؟ (اختر كل ما ينطبق)', q_en: 'How do you like to learn? (Select all)', type: 'multi', options_ar: ['فيديوهات يوتيوب', 'كتب ومقالات', 'دورات أونلاين', 'تجربة عملية', 'مع مجموعة', 'من معلم خاص'], options_en: ['YouTube videos', 'Books & articles', 'Online courses', 'Hands-on practice', 'With a group', 'Private tutor'], category: 'learning_style', tracks: { ai: 0, web: 0, design: 0, cyber: 0, business: 0 }, track_mapping: { 0: { web: 2, design: 2 }, 1: { ai: 3 }, 2: { web: 2, ai: 2 }, 3: { web: 3, cyber: 2 }, 4: { business: 3 }, 5: { business: 2 } } }
 ];

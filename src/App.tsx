@@ -8,6 +8,7 @@ import Navigation from "@/components/Navigation";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Footer } from "@/components/Footer";
 import { EduBot } from "@/components/EduBot";
+import AssistantLauncher from "@/components/AssistantLauncher";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -65,6 +66,7 @@ function AppContent() {
           <Sonner />
           <Navigation />
           <EduBot isOpen={isBotOpen} onClose={() => setIsBotOpen(false)} />
+          <AssistantLauncher />
           
           <main className="flex-1 pt-16">
             <Routes>

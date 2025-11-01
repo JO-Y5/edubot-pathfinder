@@ -23,3 +23,12 @@ verify_jwt = true
 
 [functions.generate-certificate]
 verify_jwt = true
+
+[functions.track]
+verify_jwt = false
+
+[functions.profile-upsert]
+verify_jwt = false
+
+[functions.recs]
+verify_jwt = false

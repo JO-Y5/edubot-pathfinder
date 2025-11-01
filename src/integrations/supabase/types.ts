@@ -211,6 +211,33 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_answers: {
+        Row: {
+          created_at: string | null
+          id: number
+          question_id: string
+          track: string | null
+          user_id: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          question_id: string
+          track?: string | null
+          user_id: string
+          value: Json
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          question_id?: string
+          track?: string | null
+          user_id?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       assessment_results: {
         Row: {
           answers: Json
@@ -281,6 +308,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      catalog_items: {
+        Row: {
+          country: string | null
+          description: string | null
+          embedding: string | null
+          id: string
+          kind: string | null
+          level: string | null
+          popularity: number | null
+          tags: string[] | null
+          title: string
+        }
+        Insert: {
+          country?: string | null
+          description?: string | null
+          embedding?: string | null
+          id?: string
+          kind?: string | null
+          level?: string | null
+          popularity?: number | null
+          tags?: string[] | null
+          title: string
+        }
+        Update: {
+          country?: string | null
+          description?: string | null
+          embedding?: string | null
+          id?: string
+          kind?: string | null
+          level?: string | null
+          popularity?: number | null
+          tags?: string[] | null
+          title?: string
+        }
+        Relationships: []
       }
       certificates: {
         Row: {
@@ -891,6 +954,45 @@ export type Database = {
           },
         ]
       }
+      user_embeddings: {
+        Row: {
+          embedding: string | null
+          user_id: string
+        }
+        Insert: {
+          embedding?: string | null
+          user_id: string
+        }
+        Update: {
+          embedding?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_events: {
+        Row: {
+          created_at: string | null
+          event_type: string | null
+          id: number
+          payload: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_type?: string | null
+          id?: number
+          payload?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_type?: string | null
+          id?: number
+          payload?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_points: {
         Row: {
           created_at: string
@@ -931,21 +1033,36 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          interests: string[] | null
+          lang: string | null
           plan: Database["public"]["Enums"]["plan_type"]
+          stage: string | null
+          strengths: string[] | null
+          target_roles: string[] | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
+          interests?: string[] | null
+          lang?: string | null
           plan?: Database["public"]["Enums"]["plan_type"]
+          stage?: string | null
+          strengths?: string[] | null
+          target_roles?: string[] | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          interests?: string[] | null
+          lang?: string | null
           plan?: Database["public"]["Enums"]["plan_type"]
+          stage?: string | null
+          strengths?: string[] | null
+          target_roles?: string[] | null
           updated_at?: string
           user_id?: string
         }
@@ -983,6 +1100,22 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      recs_by_user: {
+        Args: { p_kind: string; p_limit?: number; p_user_id: string }
+        Returns: {
+          description: string
+          id: string
+          kind: string
+          popularity: number
+          sim: number
+          tags: string[]
+          title: string
+        }[]
+      }
+      upsert_user_embedding: {
+        Args: { p_user_id: string; p_vec: string }
+        Returns: undefined
       }
     }
     Enums: {

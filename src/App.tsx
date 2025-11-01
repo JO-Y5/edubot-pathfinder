@@ -44,6 +44,7 @@ import LegalPrivacy from "./pages/LegalPrivacy";
 import LegalTerms from "./pages/LegalTerms";
 import Providers from "./pages/Providers";
 import Reviews from "./pages/Reviews";
+import ResultsPersonalized from "./pages/ResultsPersonalized";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -99,6 +100,7 @@ function AppContent() {
               <Route path="/legal/terms" element={<LegalTerms />} />
               <Route path="/providers" element={<Providers />} />
               <Route path="/reviews" element={<Reviews />} />
+              <Route path="/results" element={<ResultsPersonalized />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

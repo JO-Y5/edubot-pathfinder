@@ -5,15 +5,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Mail, MessageSquare, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
-import { z } from 'zod';
 
-const contactSchema = z.object({
-  name: z.string().trim().min(1, 'الاسم مطلوب').max(100, 'الاسم يجب أن يكون أقل من 100 حرف'),
-  email: z.string().trim().email('البريد الإلكتروني غير صحيح').max(255, 'البريد الإلكتروني طويل جداً'),
-  subject: z.string().trim().min(1, 'الموضوع مطلوب').max(200, 'الموضوع يجب أن يكون أقل من 200 حرف'),
-  message: z.string().trim().min(1, 'الرسالة مطلوبة').max(2000, 'الرسالة يجب أن تكون أقل من 2000 حرف'),
-});
+const COMPANY_EMAIL = 'Y5.company011@gmail.com';
 
 export default function Contact() {
   const { toast } = useToast();
@@ -25,36 +18,25 @@ export default function Contact() {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      // Validate form data
-      const validatedData = contactSchema.parse(formData);
+    // Create mailto link with form data
+    const mailtoLink = `mailto:${COMPANY_EMAIL}?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+      `الاسم: ${formData.name}\nالبريد الإلكتروني: ${formData.email}\n\nالرسالة:\n${formData.message}`
+    )}`;
+    
+    window.location.href = mailtoLink;
 
-      // Send email via edge function
-      const { error } = await supabase.functions.invoke('send-contact-email', {
-        body: validatedData,
-      });
-
-      if (error) throw error;
-
+    setTimeout(() => {
       toast({
-        title: 'تم إرسال الرسالة بنجاح',
-        description: 'سنتواصل معك قريباً',
+        title: 'تم فتح تطبيق البريد الإلكتروني',
+        description: 'يمكنك إرسال رسالتك الآن',
       });
       setFormData({ name: '', email: '', subject: '', message: '' });
-    } catch (error) {
-      console.error('Error sending message:', error);
-      toast({
-        title: 'خطأ في إرسال الرسالة',
-        description: error instanceof z.ZodError ? error.errors[0].message : 'حدث خطأ أثناء إرسال الرسالة. يرجى المحاولة مرة أخرى.',
-        variant: 'destructive',
-      });
-    } finally {
       setLoading(false);
-    }
+    }, 500);
   };
 
   return (
@@ -77,7 +59,7 @@ export default function Contact() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-lg" dir="ltr">Y5.company011@gmail.com</p>
+              <p className="text-lg" dir="ltr">{COMPANY_EMAIL}</p>
             </CardContent>
           </Card>
 

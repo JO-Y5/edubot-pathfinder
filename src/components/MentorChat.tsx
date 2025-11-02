@@ -197,58 +197,50 @@ export default function MentorChat() {
     }
   };
 
-  // STT: Record and transcribe
-  const sttFromBlob = async (blob: Blob) => {
+  // STT: Using Web Speech API (Free!)
+  const startRecord = () => {
     if (!user) return;
-    
+
     try {
-      const fd = new FormData();
-      fd.append("audio", blob, "audio.webm");
-      fd.append("lang", language);
-
-      const res = await fetch(`${EDGE}/stt`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: fd,
-      });
-
-      const j = await res.json();
-      if (j.ok && j.text) {
-        ask(j.text);
-      } else {
-        throw new Error("STT failed");
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      
+      if (!SpeechRecognition) {
+        toast({
+          title: isAr ? "خطأ" : "Error",
+          description: isAr ? "المتصفح لا يدعم التعرف على الصوت" : "Browser doesn't support speech recognition",
+          variant: "destructive",
+        });
+        return;
       }
-    } catch (e) {
-      console.error("STT error:", e);
-      toast({
-        title: isAr ? "خطأ" : "Error",
-        description: isAr ? "فشل التعرف على الصوت" : "Speech recognition failed",
-        variant: "destructive",
-      });
-    }
-  };
 
-  const startRecord = async () => {
-    try {
-      const media = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(media);
-      const chunks: Blob[] = [];
+      const recognition = new SpeechRecognition();
+      recognition.lang = isAr ? "ar-SA" : "en-US";
+      recognition.continuous = false;
+      recognition.interimResults = false;
 
-      recorder.ondataavailable = (e) => chunks.push(e.data);
-      recorder.onstop = async () => {
-        const blob = new Blob(chunks, { type: "audio/webm" });
-        await sttFromBlob(blob);
-        media.getTracks().forEach(track => track.stop());
+      recognition.onstart = () => {
+        setRecording(true);
+      };
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        ask(transcript);
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error("STT error:", event.error);
+        toast({
+          title: isAr ? "خطأ" : "Error",
+          description: isAr ? "فشل التعرف على الصوت" : "Speech recognition failed",
+          variant: "destructive",
+        });
+      };
+
+      recognition.onend = () => {
         setRecording(false);
       };
 
-      recorder.start();
-      setRecording(true);
-
-      // Record for 4 seconds
-      setTimeout(() => recorder.stop(), 4000);
+      recognition.start();
     } catch (e) {
       console.error("Recording error:", e);
       toast({
@@ -259,8 +251,8 @@ export default function MentorChat() {
     }
   };
 
-  // TTS: Speak last assistant reply
-  const ttsSpeak = async () => {
+  // TTS: Using Web Speech API (Free!)
+  const ttsSpeak = () => {
     if (!user) return;
     
     const last = [...msgs].reverse().find((m) => m.role === "assistant");
@@ -273,23 +265,28 @@ export default function MentorChat() {
     }
 
     try {
-      const res = await fetch(`${EDGE}/tts`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({ 
-          text: last.content, 
-          lang: language 
-        }),
-      });
+      if (!('speechSynthesis' in window)) {
+        toast({
+          title: isAr ? "خطأ" : "Error",
+          description: isAr ? "المتصفح لا يدعم تحويل النص إلى كلام" : "Browser doesn't support text-to-speech",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      const j = await res.json();
-      if (!j.ok) throw new Error("TTS failed");
+      const utterance = new SpeechSynthesisUtterance(last.content);
+      utterance.lang = isAr ? "ar-SA" : "en-US";
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
 
-      const audio = new Audio(`data:${j.mime};base64,${j.audio_base64}`);
-      audio.play();
+      // Get voices and select appropriate one
+      const voices = window.speechSynthesis.getVoices();
+      const voice = voices.find(v => 
+        isAr ? v.lang.startsWith('ar') : v.lang.startsWith('en')
+      );
+      if (voice) utterance.voice = voice;
+
+      window.speechSynthesis.speak(utterance);
 
       toast({
         title: isAr ? "تشغيل الصوت" : "Playing Audio",
@@ -299,9 +296,7 @@ export default function MentorChat() {
       console.error("TTS error:", e);
       toast({
         title: isAr ? "خطأ" : "Error",
-        description: isAr 
-          ? "فشل تشغيل الصوت. تأكد من إعداد Azure Speech." 
-          : "Failed to play audio. Ensure Azure Speech is configured.",
+        description: isAr ? "فشل تشغيل الصوت" : "Failed to play audio",
         variant: "destructive",
       });
     }

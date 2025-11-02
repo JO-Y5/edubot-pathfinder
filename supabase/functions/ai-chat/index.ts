@@ -5,9 +5,9 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_URL")!,
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
 );
-const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY")!;
-const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
-const MODEL = "gpt-4o-mini";
+const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
+const AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const MODEL = "google/gemini-2.5-flash";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -93,11 +93,11 @@ ${recsText}
 `;
 }
 
-async function openaiChat(messages: any[]) {
-  const r = await fetch(OPENAI_URL, {
+async function aiChat(messages: any[]) {
+  const r = await fetch(AI_URL, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${OPENAI_API_KEY}`,
+      "Authorization": `Bearer ${LOVABLE_API_KEY}`,
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
@@ -107,7 +107,10 @@ async function openaiChat(messages: any[]) {
     })
   });
   const j = await r.json();
-  if (!r.ok) throw new Error(JSON.stringify(j));
+  if (!r.ok) {
+    console.error("AI API error:", j);
+    throw new Error(JSON.stringify(j));
+  }
   return j.choices?.[0]?.message?.content || "";
 }
 
@@ -162,7 +165,7 @@ serve(async (req: Request) => {
       { role: "user", content: message }
     ];
 
-    const reply = await openaiChat(messagesPayload);
+    const reply = await aiChat(messagesPayload);
 
     // Save assistant message
     if (conversation_id) {

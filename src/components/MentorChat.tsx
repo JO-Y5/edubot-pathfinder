@@ -198,16 +198,19 @@ export default function MentorChat() {
   };
 
   // STT: Using Web Speech API (Free!)
-  const startRecord = () => {
+  const startRecord = async () => {
     if (!user) return;
 
     try {
+      // Request microphone permission first
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
       if (!SpeechRecognition) {
         toast({
           title: isAr ? "خطأ" : "Error",
-          description: isAr ? "المتصفح لا يدعم التعرف على الصوت" : "Browser doesn't support speech recognition",
+          description: isAr ? "المتصفح لا يدعم التعرف على الصوت. جرب Chrome أو Edge" : "Browser doesn't support speech recognition. Try Chrome or Edge",
           variant: "destructive",
         });
         return;
@@ -217,21 +220,37 @@ export default function MentorChat() {
       recognition.lang = isAr ? "ar-SA" : "en-US";
       recognition.continuous = false;
       recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
 
       recognition.onstart = () => {
         setRecording(true);
+        toast({
+          title: isAr ? "🎤 استمع" : "🎤 Listening",
+          description: isAr ? "تكلم الآن..." : "Speak now...",
+        });
       };
 
       recognition.onresult = (event: any) => {
         const transcript = event.results[0][0].transcript;
-        ask(transcript);
+        if (transcript.trim()) {
+          ask(transcript);
+        }
       };
 
       recognition.onerror = (event: any) => {
         console.error("STT error:", event.error);
+        setRecording(false);
+        
+        let errorMsg = isAr ? "فشل التعرف على الصوت" : "Speech recognition failed";
+        if (event.error === "not-allowed") {
+          errorMsg = isAr ? "يرجى السماح باستخدام المايك" : "Please allow microphone access";
+        } else if (event.error === "no-speech") {
+          errorMsg = isAr ? "لم يتم سماع أي صوت" : "No speech detected";
+        }
+        
         toast({
           title: isAr ? "خطأ" : "Error",
-          description: isAr ? "فشل التعرف على الصوت" : "Speech recognition failed",
+          description: errorMsg,
           variant: "destructive",
         });
       };
@@ -243,9 +262,10 @@ export default function MentorChat() {
       recognition.start();
     } catch (e) {
       console.error("Recording error:", e);
+      setRecording(false);
       toast({
         title: isAr ? "خطأ" : "Error",
-        description: isAr ? "فشل الوصول للمايك" : "Failed to access microphone",
+        description: isAr ? "فشل الوصول للمايك. تحقق من الصلاحيات" : "Failed to access microphone. Check permissions",
         variant: "destructive",
       });
     }
@@ -274,24 +294,49 @@ export default function MentorChat() {
         return;
       }
 
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
       const utterance = new SpeechSynthesisUtterance(last.content);
       utterance.lang = isAr ? "ar-SA" : "en-US";
-      utterance.rate = 1.0;
+      utterance.rate = 1.1; // Slightly faster
       utterance.pitch = 1.0;
+      utterance.volume = 1.0;
 
-      // Get voices and select appropriate one
-      const voices = window.speechSynthesis.getVoices();
-      const voice = voices.find(v => 
-        isAr ? v.lang.startsWith('ar') : v.lang.startsWith('en')
-      );
-      if (voice) utterance.voice = voice;
+      // Wait for voices to load
+      const speakWithVoice = () => {
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Try to find a better Arabic voice
+        const voice = voices.find(v => {
+          if (isAr) {
+            // Prefer Google Arabic or Microsoft Arabic voices
+            return v.lang.startsWith('ar') && (v.name.includes('Google') || v.name.includes('Microsoft'));
+          } else {
+            return v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Microsoft'));
+          }
+        }) || voices.find(v => isAr ? v.lang.startsWith('ar') : v.lang.startsWith('en'));
+        
+        if (voice) {
+          utterance.voice = voice;
+          console.log('Using voice:', voice.name);
+        }
 
-      window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.speak(utterance);
 
-      toast({
-        title: isAr ? "تشغيل الصوت" : "Playing Audio",
-        description: isAr ? "جاري تشغيل الرد بالصوت" : "Playing response audio",
-      });
+        toast({
+          title: isAr ? "🔊 تشغيل" : "🔊 Playing",
+          description: isAr ? "جاري تشغيل الرد" : "Playing response",
+        });
+      };
+
+      // If voices are already loaded, speak immediately
+      if (window.speechSynthesis.getVoices().length > 0) {
+        speakWithVoice();
+      } else {
+        // Wait for voices to load
+        window.speechSynthesis.onvoiceschanged = speakWithVoice;
+      }
     } catch (e) {
       console.error("TTS error:", e);
       toast({

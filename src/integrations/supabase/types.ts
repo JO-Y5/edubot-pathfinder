@@ -410,6 +410,27 @@ export type Database = {
           },
         ]
       }
+      conversations: {
+        Row: {
+          created_at: string | null
+          id: string
+          title: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          title?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          title?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       course_progress: {
         Row: {
           completed: boolean
@@ -598,6 +619,44 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string | null
+          created_at: string | null
+          id: number
+          lang: string | null
+          role: string
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: number
+          lang?: string | null
+          role: string
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: number
+          lang?: string | null
+          role?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
             referencedColumns: ["id"]
           },
         ]
@@ -993,6 +1052,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_insights: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: number
+          source_message_id: number | null
+          tags: string[] | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: number
+          source_message_id?: number | null
+          tags?: string[] | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: number
+          source_message_id?: number | null
+          tags?: string[] | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_points: {
         Row: {
           created_at: string
@@ -1094,6 +1183,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ensure_default_conversation: { Args: { p_user: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

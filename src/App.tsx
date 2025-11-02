@@ -45,6 +45,7 @@ import LegalTerms from "./pages/LegalTerms";
 import Providers from "./pages/Providers";
 import Reviews from "./pages/Reviews";
 import ResultsPersonalized from "./pages/ResultsPersonalized";
+import Mentor from "./pages/Mentor";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -101,6 +102,7 @@ function AppContent() {
               <Route path="/providers" element={<Providers />} />
               <Route path="/reviews" element={<Reviews />} />
               <Route path="/results" element={<ResultsPersonalized />} />
+              <Route path="/mentor" element={<Mentor />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

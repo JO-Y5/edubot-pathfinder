@@ -37,6 +37,7 @@ export function AppSidebar({ onOpenBot }: AppSidebarProps) {
     { path: "/", icon: Home, label: t("nav_home"), show: true },
     { path: "/assessment/start", icon: ClipboardList, label: t("nav_assessment"), show: true },
     { path: "/dashboard", icon: LayoutDashboard, label: t("nav_dashboard"), show: true },
+    { path: "/mentor", icon: Bot, label: isAr ? "المرشد الذكي" : "AI Mentor", show: !!user },
     { path: "/courses", icon: BookOpen, label: t("nav_courses"), show: true },
     { path: "/achievements", icon: Award, label: t("nav_achievements"), show: true },
   ];

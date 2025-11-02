@@ -35,3 +35,15 @@ verify_jwt = false
 
 [functions.embed-catalog]
 verify_jwt = false
+
+[functions.ai-chat]
+verify_jwt = true
+
+[functions.stt]
+verify_jwt = true
+
+[functions.tts]
+verify_jwt = true
+
+[functions.insights]
+verify_jwt = true
